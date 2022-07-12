@@ -1,6 +1,5 @@
 package br.com.marlonbarbearia.appointment;
 
-import br.com.marlonbarbearia.services.AppointmentService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

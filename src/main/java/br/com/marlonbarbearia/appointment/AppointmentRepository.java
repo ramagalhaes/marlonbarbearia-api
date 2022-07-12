@@ -9,41 +9,36 @@ import java.util.Optional;
 
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
 
-    @Query("SELECT new br.com.marlonbarbearia.appointment.AppointmentResponse" +
-            "(a.id, a.barberId, a.createdAt, a.customerId, a.date) " +
+    @Query("SELECT a " +
             "FROM Appointment  a")
-    List<AppointmentResponse> findAllAppointments();
+    List<Appointment> findAllAppointments();
 
-    @Query("SELECT new br.com.marlonbarbearia.appointment.AppointmentResponse" +
-            "(a.id, a.barberId, a.createdAt, a.customerId, a.date) " +
+    @Query("SELECT a " +
             "FROM Appointment a " +
             "WHERE DAY(a.date) = :day " +
             "AND MONTH(a.date) = :month " +
             "AND YEAR(a.date) = :year")
-    List<AppointmentResponse> findAppointmentsByDate(
+    List<Appointment> findAppointmentsByDate(
             @Param("day") Integer day, @Param("month") Integer month, @Param("year") Integer year);
 
-    @Query("SELECT new br.com.marlonbarbearia.appointment.AppointmentResponse" +
-            "(a.id, a.barberId, a.createdAt, a.customerId, a.date) " +
+    @Query("SELECT a " +
             "FROM Appointment a " +
-            "WHERE a.barberId = :barberId")
-    List<AppointmentResponse> findAllAppointmentsByBarberId(@Param("barberId") Long barberId);
+            "WHERE a.barber.id = :barberId")
+    List<Appointment> findAllAppointmentsByBarberId(@Param("barberId") Long barberId);
 
-    @Query("SELECT new br.com.marlonbarbearia.appointment.AppointmentResponse" +
-            "(a.id, a.barberId, a.createdAt, a.customerId, a.date) " +
+    @Query("SELECT a " +
             "FROM Appointment a " +
-            "WHERE a.barberId = :barberId " +
+            "WHERE a.barber.id = :barberId " +
             "AND DAY(a.date) = :day " +
             "AND MONTH(a.date) = :month " +
             "AND YEAR(a.date) = :year ")
-    List<AppointmentResponse> findAppointmentsByDateAndBarberId(
+    List<Appointment> findAppointmentsByDateAndBarberId(
             @Param("day") Integer day, @Param("month") Integer month,
             @Param("year") Integer year, @Param("barberId") Long barberId);
 
-    @Query("SELECT new br.com.marlonbarbearia.appointment.AppointmentResponse" +
-            "(a.id, a.barberId, a.createdAt, a.customerId, a.date) " +
+    @Query("SELECT a " +
             "FROM Appointment a " +
             "WHERE a.id = :appointmentId")
-    Optional<AppointmentResponse> findAppointmentById(@Param("appointmentId") Long appointmentId);
+    Optional<Appointment> findAppointmentById(@Param("appointmentId") Long appointmentId);
 
 }

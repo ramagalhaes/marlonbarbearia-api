@@ -1,16 +1,22 @@
 package br.com.marlonbarbearia.appointment;
 
+import br.com.marlonbarbearia.barber.Barber;
+import br.com.marlonbarbearia.customer.Customer;
 import br.com.marlonbarbearia.exceptions.DateException;
-import br.com.marlonbarbearia.services.AppointmentService;
+import br.com.marlonbarbearia.barber.BarberService;
+import br.com.marlonbarbearia.customer.CustomerService;
+import br.com.marlonbarbearia.hairjob.HairJob;
+import br.com.marlonbarbearia.hairjob.HairJobService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -18,18 +24,26 @@ import java.util.Optional;
 public class AppointmentServiceImpl implements AppointmentService {
 
     private final AppointmentRepository repository;
+    private final BarberService barberService;
+
+    private final CustomerService customerService;
+    private final HairJobService hairJobService;
 
     @Override
     public List<AppointmentResponse> findAllAppointments() {
-        return this.repository.findAllAppointments();
+        return this.repository.findAllAppointments()
+                .stream()
+                .map(a -> AppointmentMapper.appointmentToResponse(a))
+                .collect(Collectors.toList());
     }
 
     @Override
     public AppointmentResponse findAppointmentById(Long appointmentId) {
-        Optional<AppointmentResponse> responseOptional = this.repository.findAppointmentById(appointmentId);
-        return responseOptional.orElseThrow(
-                () -> new ObjectNotFoundException(appointmentId, Appointment.class.getSimpleName())
-        );
+        Optional<Appointment> responseOptional = this.repository.findAppointmentById(appointmentId);
+        if(responseOptional.isEmpty()) {
+            throw new ObjectNotFoundException(appointmentId, Appointment.class.getSimpleName());
+        }
+       return AppointmentMapper.appointmentToResponse(responseOptional.get());
     }
 
     @Override
@@ -49,16 +63,16 @@ public class AppointmentServiceImpl implements AppointmentService {
         int newAppointmentYear = newAppointment.date().getYear();
         long newAppointmentBarber = newAppointment.barberId();
 
-        List<AppointmentResponse> existingAppointments = this.repository.findAppointmentsByDateAndBarberId(
+        List<Appointment> existingAppointments = this.repository.findAppointmentsByDateAndBarberId(
                 newAppointmentDay, newAppointmentMonth, newAppointmentYear, newAppointmentBarber
         );
         if(!existingAppointments.isEmpty()) {
-            for (AppointmentResponse appointment : existingAppointments) {
-                boolean newAppointmentStartsBeforeExisting = newAppointment.date().isBefore(appointment.date());
+            for (Appointment appointment : existingAppointments) {
+                boolean newAppointmentStartsBeforeExisting = newAppointment.date().isBefore(appointment.getDate());
                 boolean newAppointmentEndsBeforeExistingStarts = newAppointment
-                        .date().plusMinutes(45).isBefore(appointment.date());
+                        .date().plusMinutes(45).isBefore(appointment.getDate());
                 boolean newAppointmentStartsAfterExistingEnds = newAppointment
-                        .date().isAfter(appointment.date().plusMinutes(45));
+                        .date().isAfter(appointment.getDate().plusMinutes(45));
 
                 if (!((newAppointmentStartsBeforeExisting && newAppointmentEndsBeforeExistingStarts) ||
                         newAppointmentStartsAfterExistingEnds)) {
@@ -72,31 +86,45 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public void createAppointment(AppointmentRequest request) {
         if(!isAppointmentWithoutRangeOfExistingAppointments(request)) {
-            throw new DateException("The date: " + request.date() + " is already taken");
+            throw new DateException("The date: [" + request.date() + "] is already taken");
         }
+        Barber barber = this.barberService.findBarberEntityById(request.barberId());
+        Customer customer = this.customerService.findCustomerEntityById(request.customerId());
+        Set<HairJob> hairJobs = request.hairJobs()
+                .stream()
+                .map(id -> this.hairJobService.findHairJobEntityById(id))
+                .collect(Collectors.toSet());
+
         this.repository.save(
                 Appointment.builder()
                         .date(request.date())
                         .createdAt(LocalDateTime.now())
-                        .barberId(request.barberId())
-                        .customerId(request.customerId())
+                        .barber(barber)
+                        .customer(customer)
+                        .hairJobs(hairJobs)
                         .build());
     }
 
     @Override
     public List<AppointmentResponse> findAppointmentsByDate(Integer day, Integer month, Integer year) {
-        return this.repository.findAppointmentsByDate(day, month, year);
+        return this.repository.findAppointmentsByDate(day, month, year).stream()
+                .map(a -> AppointmentMapper.appointmentToResponse(a))
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<AppointmentResponse> findAllAppointmentsByBarber(Long barberId) {
-        return this.repository.findAllAppointmentsByBarberId(barberId);
+        return this.repository.findAllAppointmentsByBarberId(barberId).stream()
+                .map(a -> AppointmentMapper.appointmentToResponse(a))
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<AppointmentResponse> findAllAppointmentsByDateAndBarber(
             Integer day, Integer month, Integer year, Long barberId) {
         return this.repository
-                .findAppointmentsByDateAndBarberId(day, month, year, barberId);
+                .findAppointmentsByDateAndBarberId(day, month, year, barberId).stream()
+                .map(a -> AppointmentMapper.appointmentToResponse(a))
+                .collect(Collectors.toList());
     }
 }

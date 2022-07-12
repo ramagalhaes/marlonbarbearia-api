@@ -3,3 +3,7 @@ spring:
     name: marlonbarbearia
   profiles:
     active: dev
+
+marlonbarbearia:
+  appointment:
+    duration: (44 * 60) + 59

@@ -2,13 +2,15 @@ package br.com.marlonbarbearia.appointment;
 
 import br.com.marlonbarbearia.barber.Barber;
 import br.com.marlonbarbearia.customer.Customer;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import br.com.marlonbarbearia.hairjob.HairJob;
+import br.com.marlonbarbearia.hairjob.HairJobResponse;
+import lombok.*;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -22,12 +24,25 @@ public class Appointment {
     @GeneratedValue(generator ="sequence_id_appointment")
     private Long id;
 
-    @Column(name="fk_barber_id")
-    private Long barberId;
+    @ManyToOne
+    @JoinColumn(name = "barber_id")
+    private Barber barber;
     private LocalDateTime createdAt;
 
-    @Column(name="fk_customer_id")
-    private Long customerId;
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
     private LocalDateTime date;
+
+    @Setter(AccessLevel.NONE)
+    @Getter(AccessLevel.NONE)
+    private BigDecimal price;
+
+    @ManyToMany
+    @JoinTable(
+            joinColumns = {@JoinColumn(name = "appointment_id")},
+            inverseJoinColumns = @JoinColumn(name = "hairjob_id")
+    )
+    private Set<HairJob> hairJobs;
 
 }
