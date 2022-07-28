@@ -7,3 +7,8 @@ spring:
 marlonbarbearia:
   appointment:
     duration: (44 * 60) + 59
+
+jwt:
+  secret:
+    expiration: 60000
+    encoder: 6b656A&456-2be%$9-4e59-817b*!-7c3Q&@37fba1bc

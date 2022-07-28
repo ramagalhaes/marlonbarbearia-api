@@ -9,6 +9,6 @@ public record HairJobResponse(
         Long id,
         String name,
         BigDecimal price,
-        Integer durationInSeconds
+        Integer durationInMinutes
 ) {
 }

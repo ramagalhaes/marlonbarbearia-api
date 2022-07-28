@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootApplication
 public class MarlonBarbeariaApplication implements CommandLineRunner {
@@ -16,6 +17,9 @@ public class MarlonBarbeariaApplication implements CommandLineRunner {
     private BarberRepository barberRepository;
     @Autowired
     private CustomerRepository customerRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     public static void main(String[] args) {
         SpringApplication.run(MarlonBarbeariaApplication.class, args);
@@ -31,6 +35,7 @@ public class MarlonBarbeariaApplication implements CommandLineRunner {
         this.customerRepository.save(Customer.builder()
                 .name("Raphael")
                 .phoneNumber("33994135")
+                .password(passwordEncoder.encode("12341234"))
                 .build());
     }
 }

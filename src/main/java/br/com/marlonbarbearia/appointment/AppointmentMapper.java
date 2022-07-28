@@ -1,6 +1,5 @@
 package br.com.marlonbarbearia.appointment;
 
-import br.com.marlonbarbearia.hairjob.HairJob;
 import br.com.marlonbarbearia.hairjob.HairJobResponse;
 
 import java.util.stream.Collectors;
@@ -16,14 +15,17 @@ public class AppointmentMapper {
                 .customerId(appointment.getCustomer().getId())
                 .customerName(appointment.getCustomer().getName())
                 .date(appointment.getDate())
+                .durationInMinutes(appointment.getDurationInMinutes())
+                .endTime(appointment.getDate().plusMinutes(appointment.getDurationInMinutes()))
                 .hairJobs(appointment.getHairJobs().stream()
                         .map(h -> HairJobResponse.builder()
                                 .id(h.getId())
-                                .durationInSeconds(h.getDurationInSeconds())
+                                .durationInMinutes(h.getDurationInMinutes())
                                 .name(h.getName())
                                 .price(h.getPrice())
                                 .build()
                         ).collect(Collectors.toSet()))
+                .price(appointment.getPrice())
                 .build();
     }
 

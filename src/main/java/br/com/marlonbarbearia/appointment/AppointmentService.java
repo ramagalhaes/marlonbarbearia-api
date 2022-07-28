@@ -1,8 +1,5 @@
 package br.com.marlonbarbearia.appointment;
 
-import br.com.marlonbarbearia.appointment.AppointmentRequest;
-import br.com.marlonbarbearia.appointment.AppointmentResponse;
-
 import java.util.List;
 
 public interface AppointmentService {

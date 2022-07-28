@@ -33,9 +33,7 @@ public class Appointment {
     @JoinColumn(name = "customer_id")
     private Customer customer;
     private LocalDateTime date;
-
-    @Setter(AccessLevel.NONE)
-    @Getter(AccessLevel.NONE)
+    private Integer durationInMinutes;
     private BigDecimal price;
 
     @ManyToMany

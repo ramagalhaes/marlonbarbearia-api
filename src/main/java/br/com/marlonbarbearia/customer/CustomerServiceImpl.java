@@ -1,5 +1,6 @@
 package br.com.marlonbarbearia.customer;
 
+import br.com.marlonbarbearia.enums.UserType;
 import br.com.marlonbarbearia.exceptions.ObjectAlreadyExistsException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -7,6 +8,9 @@ import org.hibernate.ObjectNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -22,13 +26,19 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     public CustomerResponse findCustomerById(Long customerId) {
-        return this.repository.findCustomerById(customerId)
-                .orElseThrow(() -> new ObjectNotFoundException(customerId, Customer.class.getSimpleName()));
+        Optional<Customer> customerOptional = this.repository.findCustomerById(customerId);
+        if(customerOptional.isEmpty()) {
+            throw new ObjectNotFoundException(customerId, Customer.class.getSimpleName());
+        }
+        return CustomerMapper.customerEntityToResponse(customerOptional.get());
     }
 
     @Override
     public List<CustomerResponse> findAllCustomers() {
-        return this.repository.findAllCustomers();
+        return this.repository.findAllCustomers()
+                .stream()
+                .map(customer -> CustomerMapper.customerEntityToResponse(customer))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -45,14 +55,18 @@ public class CustomerServiceImpl implements CustomerService {
         this.repository.save(Customer.builder()
                 .name(request.name())
                 .phoneNumber(request.phoneNumber())
+                .roles(Set.of(UserType.CUSTOMER))
                 .build()
         );
     }
 
     @Override
     public CustomerResponse findCustomerByPhoneNumber(String phoneNumber) {
-        return this.repository.findCustomerByPhoneNumber(phoneNumber)
-                .orElseThrow(() -> new ObjectNotFoundException(phoneNumber, Customer.class.getSimpleName()));
+        Optional<Customer> customerOptional = this.repository.findCustomerByPhoneNumber(phoneNumber);
+        if(customerOptional.isEmpty()) {
+            throw new ObjectNotFoundException(phoneNumber, Customer.class.getSimpleName());
+        }
+        return CustomerMapper.customerEntityToResponse(customerOptional.get());
     }
 }
 

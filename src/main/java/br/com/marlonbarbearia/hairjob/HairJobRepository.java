@@ -9,16 +9,16 @@ import java.util.Optional;
 
 public interface HairJobRepository extends JpaRepository<HairJob, Long> {
 
-    @Query("SELECT new br.com.marlonbarbearia.hairjob.HairJobResponse(h.id, h.name, h.price, h.durationInSeconds) " +
+    @Query("SELECT new br.com.marlonbarbearia.hairjob.HairJobResponse(h.id, h.name, h.price, h.durationInMinutes) " +
             "FROM HairJob h")
     List<HairJobResponse> findAllHairJobs();
 
-    @Query("SELECT new br.com.marlonbarbearia.hairjob.HairJobResponse(h.id, h.name, h.price, h.durationInSeconds) " +
+    @Query("SELECT new br.com.marlonbarbearia.hairjob.HairJobResponse(h.id, h.name, h.price, h.durationInMinutes) " +
             "FROM HairJob h " +
             "WHERE h.id = :hairJobId")
     Optional<HairJobResponse> findHairJobById(@Param("hairJobId") Long hairJobId);
 
-    @Query("SELECT new br.com.marlonbarbearia.hairjob.HairJobResponse(h.id, h.name, h.price, h.durationInSeconds) " +
+    @Query("SELECT new br.com.marlonbarbearia.hairjob.HairJobResponse(h.id, h.name, h.price, h.durationInMinutes) " +
             "FROM HairJob h " +
             "WHERE h.name = :hairJobName")
     Optional<HairJobResponse> findHairJobByHairJobName(@Param("hairJobName") String hairJobName);

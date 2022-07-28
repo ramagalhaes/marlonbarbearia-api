@@ -21,7 +21,7 @@ public class HairJob {
     private Long id;
     private String name;
     private BigDecimal price;
-    private Integer durationInSeconds;
+    private Integer durationInMinutes;
 
     @ManyToMany(mappedBy = "hairJobs")
     @JsonIgnore

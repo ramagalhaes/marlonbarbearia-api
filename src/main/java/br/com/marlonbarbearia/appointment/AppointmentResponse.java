@@ -16,25 +16,13 @@ public record AppointmentResponse(
         Long customerId,
         String customerName,
         LocalDateTime date,
-        Integer durationInSeconds,
+        Integer durationInMinutes,
+        LocalDateTime endTime,
         Set<HairJobResponse> hairJobs,
         BigDecimal price
 ) {
     @Override
-    public BigDecimal price() {
-        BigDecimal total = new BigDecimal(0);
-        for(HairJobResponse h : hairJobs) {
-            total = total.add(h.price());
-        }
-        return total;
-    }
-
-    @Override
-    public Integer durationInSeconds() {
-        int total = 0;
-        for(HairJobResponse h : hairJobs) {
-            total += h.durationInSeconds();
-        }
-        return total;
+    public LocalDateTime endTime() {
+        return date.plusMinutes(durationInMinutes);
     }
 }

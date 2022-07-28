@@ -1,10 +1,10 @@
 package br.com.marlonbarbearia.appointment;
 
 import br.com.marlonbarbearia.barber.Barber;
-import br.com.marlonbarbearia.customer.Customer;
-import br.com.marlonbarbearia.exceptions.DateException;
 import br.com.marlonbarbearia.barber.BarberService;
+import br.com.marlonbarbearia.customer.Customer;
 import br.com.marlonbarbearia.customer.CustomerService;
+import br.com.marlonbarbearia.exceptions.DateException;
 import br.com.marlonbarbearia.hairjob.HairJob;
 import br.com.marlonbarbearia.hairjob.HairJobService;
 import lombok.AllArgsConstructor;
@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -94,6 +95,11 @@ public class AppointmentServiceImpl implements AppointmentService {
                 .stream()
                 .map(id -> this.hairJobService.findHairJobEntityById(id))
                 .collect(Collectors.toSet());
+        BigDecimal totalPrice = hairJobs
+                .stream()
+                .reduce(BigDecimal.ZERO, (acc, curr) -> acc.add(curr.getPrice()), BigDecimal::add);
+        int totalDurationInMinutes = hairJobs.stream()
+                .reduce(0, (acc, curr) -> Integer.sum(acc, curr.getDurationInMinutes()), Integer::sum);
 
         this.repository.save(
                 Appointment.builder()
@@ -102,6 +108,8 @@ public class AppointmentServiceImpl implements AppointmentService {
                         .barber(barber)
                         .customer(customer)
                         .hairJobs(hairJobs)
+                        .price(totalPrice)
+                        .durationInMinutes(totalDurationInMinutes)
                         .build());
     }
 

@@ -45,7 +45,7 @@ public class HairJobServiceImpl implements HairJobService {
                         .id(existingHairJob.getId())
                         .name(hairJobRequest.name())
                         .price(hairJobRequest.price())
-                        .durationInSeconds(hairJobRequest.durationInSeconds())
+                        .durationInMinutes(hairJobRequest.durationInMinutes())
                         .build()
         );
     }
@@ -59,7 +59,7 @@ public class HairJobServiceImpl implements HairJobService {
                 HairJob.builder()
                         .name(hairJobRequest.name())
                         .price(hairJobRequest.price())
-                        .durationInSeconds((hairJobRequest.durationInSeconds()))
+                        .durationInMinutes((hairJobRequest.durationInMinutes()))
                         .build()
         );
     }
