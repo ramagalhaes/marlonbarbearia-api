@@ -12,7 +12,7 @@ import java.util.Collection;
 public class UserSpringSecurity implements UserDetails {
 
     private Long id;
-    private String phoneNumber;
+    private String username;
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
 
@@ -22,17 +22,17 @@ public class UserSpringSecurity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return this.authorities;
     }
 
     @Override
     public String getPassword() {
-        return null;
+        return this.password;
     }
 
     @Override
     public String getUsername() {
-        return null;
+        return this.username;
     }
 
     @Override

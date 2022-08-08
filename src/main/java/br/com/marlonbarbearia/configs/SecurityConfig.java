@@ -29,15 +29,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtUtil jwtUtil;
 
     private static final String[] PUBLIC_MATCHERS = {
-            "/api/v1/**",
-            "/h2-console/**"
+            "/h2-console/**",
+            "/api/v1/users/**"
     };
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        if(Arrays.asList(env.getActiveProfiles()).contains("dev")) {
+        if(Arrays.asList(env.getActiveProfiles()).contains("dev")) {
             http.headers().frameOptions().disable();
-//        }
+        }
 
         http.cors().and().csrf().disable();
         http.authorizeRequests()

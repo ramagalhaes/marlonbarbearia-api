@@ -6,8 +6,8 @@ public class CustomerMapper {
         return CustomerResponse.builder()
                 .id(customer.getId())
                 .name(customer.getName())
+                .lastName(customer.getLastName())
                 .phoneNumber(customer.getPhoneNumber())
-                .roles(customer.getRoles())
                 .build();
     }
 

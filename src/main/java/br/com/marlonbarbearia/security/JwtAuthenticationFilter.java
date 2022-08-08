@@ -30,7 +30,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
             UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(
-                            credentials.phoneNumber(), credentials.password(), new ArrayList<>());
+                            credentials.username(), credentials.password(), new ArrayList<>());
 
             Authentication authentication = authenticationManager.authenticate(authenticationToken);
             return authentication;
@@ -45,8 +45,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             HttpServletRequest request, HttpServletResponse response,
             FilterChain chain, Authentication authentication) throws IOException, ServletException {
 
-        String phoneNumber = ((UserSpringSecurity) authentication.getPrincipal()).getUsername();
-        String token = jwtUtil.generateToken(phoneNumber);
+        String username = ((UserSpringSecurity) authentication.getPrincipal()).getUsername();
+        String token = jwtUtil.generateToken(username);
         response.addHeader("Authorization", "Bearer " + token);
 
     }

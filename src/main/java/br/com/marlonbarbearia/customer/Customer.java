@@ -7,7 +7,6 @@ import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -26,17 +25,13 @@ public class Customer {
     @Id
     private Long id;
     private String name;
+    private String lastName;
     private String phoneNumber;
-    @JsonIgnore
-    private String password;
 
     @OneToMany(mappedBy = "customer")
     @JsonIgnore
     @ToString.Exclude
     private List<Appointment> appointments;
-
-    @ElementCollection(fetch = FetchType.EAGER)
-    private Set<UserType> roles;
 
     @Override
     public boolean equals(Object o) {

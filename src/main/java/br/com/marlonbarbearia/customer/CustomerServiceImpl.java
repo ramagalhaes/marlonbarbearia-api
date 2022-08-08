@@ -52,12 +52,12 @@ public class CustomerServiceImpl implements CustomerService {
             throw new ObjectAlreadyExistsException
                     ("Customer with phone number: [" + request.phoneNumber() + "] already exists");
         }
-        this.repository.save(Customer.builder()
-                .name(request.name())
-                .phoneNumber(request.phoneNumber())
-                .roles(Set.of(UserType.CUSTOMER))
-                .build()
-        );
+//        this.repository.save(Customer.builder()
+//                .name(request.name())
+//                .phoneNumber(request.phoneNumber())
+//                .roles(Set.of(UserType.CUSTOMER))
+//                .build()
+//        );
     }
 
     @Override
