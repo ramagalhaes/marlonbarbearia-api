@@ -2,7 +2,6 @@ package br.com.marlonbarbearia.security;
 
 import br.com.marlonbarbearia.user.User;
 import br.com.marlonbarbearia.user.UserRepository;
-import br.com.marlonbarbearia.user.UserService;
 import lombok.AllArgsConstructor;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

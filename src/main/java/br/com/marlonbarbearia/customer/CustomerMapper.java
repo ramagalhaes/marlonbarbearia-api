@@ -1,7 +1,6 @@
 package br.com.marlonbarbearia.customer;
 
 public class CustomerMapper {
-
     public static CustomerResponse customerEntityToResponse(Customer customer) {
         return CustomerResponse.builder()
                 .id(customer.getId())
@@ -10,5 +9,4 @@ public class CustomerMapper {
                 .phoneNumber(customer.getPhoneNumber())
                 .build();
     }
-
 }

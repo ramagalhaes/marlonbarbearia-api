@@ -1,7 +1,6 @@
 package br.com.marlonbarbearia.customer;
 
 import br.com.marlonbarbearia.appointment.Appointment;
-import br.com.marlonbarbearia.enums.UserType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.Hibernate;
@@ -9,7 +8,6 @@ import org.hibernate.Hibernate;
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Builder

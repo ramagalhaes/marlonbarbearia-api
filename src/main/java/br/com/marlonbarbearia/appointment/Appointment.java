@@ -3,13 +3,14 @@ package br.com.marlonbarbearia.appointment;
 import br.com.marlonbarbearia.barber.Barber;
 import br.com.marlonbarbearia.customer.Customer;
 import br.com.marlonbarbearia.hairjob.HairJob;
-import br.com.marlonbarbearia.hairjob.HairJobResponse;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 
 @Data

@@ -1,9 +1,5 @@
 package br.com.marlonbarbearia.customer;
 
-import br.com.marlonbarbearia.customer.Customer;
-import br.com.marlonbarbearia.customer.CustomerRequest;
-import br.com.marlonbarbearia.customer.CustomerResponse;
-
 import java.util.List;
 
 public interface CustomerService {

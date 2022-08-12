@@ -6,7 +6,6 @@ import br.com.marlonbarbearia.customer.CustomerService;
 import br.com.marlonbarbearia.enums.UserType;
 import br.com.marlonbarbearia.exceptions.ObjectAlreadyExistsException;
 import lombok.AllArgsConstructor;
-import org.hibernate.ObjectNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
