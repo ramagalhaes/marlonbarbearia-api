@@ -23,6 +23,7 @@ public class Barber {
     @Id
     private Long id;
     private String name;
+    private String lastName;
     private String phoneNumber;
 
     @OneToMany(mappedBy = "barber")

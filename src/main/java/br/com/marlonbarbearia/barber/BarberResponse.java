@@ -6,6 +6,7 @@ import lombok.Builder;
 public record BarberResponse(
         Long id,
         String name,
+        String lastName,
         String phoneNumber
 ) {
 }

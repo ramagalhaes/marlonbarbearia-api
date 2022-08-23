@@ -29,7 +29,7 @@ public class UserService {
 
     public void createNewCustomer(CreateUserRequest userRequest) {
        if(isPhoneNumberTaken(userRequest.phoneNumber())) {
-           throw new ObjectAlreadyExistsException("User with: [] already exists!");
+           throw new ObjectAlreadyExistsException("Phone Number: [] is taken!");
        }
        String name = userRequest.name();
        String lastName = userRequest.lastName();
