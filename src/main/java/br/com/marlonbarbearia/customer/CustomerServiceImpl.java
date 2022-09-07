@@ -1,6 +1,5 @@
 package br.com.marlonbarbearia.customer;
 
-import br.com.marlonbarbearia.enums.UserType;
 import br.com.marlonbarbearia.exceptions.ObjectAlreadyExistsException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,7 +35,7 @@ public class CustomerServiceImpl implements CustomerService {
     public List<CustomerResponse> findAllCustomers() {
         return this.repository.findAllCustomers()
                 .stream()
-                .map(customer -> CustomerMapper.customerEntityToResponse(customer))
+                .map(CustomerMapper::customerEntityToResponse)
                 .collect(Collectors.toList());
     }
 
@@ -48,7 +46,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void createCustomer(CustomerRequest request) {
-        if(!this.repository.findCustomerByPhoneNumber(request.phoneNumber()).isEmpty()){
+        if(this.repository.findCustomerByPhoneNumber(request.phoneNumber()).isPresent()){
             throw new ObjectAlreadyExistsException
                     ("Customer with phone number: [" + request.phoneNumber() + "] already exists");
         }
@@ -72,10 +70,4 @@ public class CustomerServiceImpl implements CustomerService {
 }
 
 
-//TODO: selecao de servicos -> adicionar o tempo de acordo com selecao
-// Corte de cabelo - 40m - 25$
-// barba - 20m - 20$
-// sobrancelha - 5m - 5$
-// pigmentacao - 10m - 10$
-// enviar msg por wpp
-// dia de funcionamento -> 2a 3a tattoo, resto barbearia
+//TODO: enviar msg por wpp

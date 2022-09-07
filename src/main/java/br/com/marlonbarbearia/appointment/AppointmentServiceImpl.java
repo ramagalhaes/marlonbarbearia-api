@@ -34,7 +34,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     public List<AppointmentResponse> findAllAppointments() {
         return this.repository.findAllAppointments()
                 .stream()
-                .map(a -> AppointmentMapper.appointmentToResponse(a))
+                .map(AppointmentMapper::appointmentToResponse)
                 .collect(Collectors.toList());
     }
 
@@ -93,7 +93,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         Customer customer = this.customerService.findCustomerEntityById(request.customerId());
         Set<HairJob> hairJobs = request.hairJobs()
                 .stream()
-                .map(id -> this.hairJobService.findHairJobEntityById(id))
+                .map(this.hairJobService::findHairJobEntityById)
                 .collect(Collectors.toSet());
         BigDecimal totalPrice = hairJobs
                 .stream()
@@ -116,14 +116,14 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public List<AppointmentResponse> findAppointmentsByDate(Integer day, Integer month, Integer year) {
         return this.repository.findAppointmentsByDate(day, month, year).stream()
-                .map(a -> AppointmentMapper.appointmentToResponse(a))
+                .map(AppointmentMapper::appointmentToResponse)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<AppointmentResponse> findAllAppointmentsByBarber(Long barberId) {
         return this.repository.findAllAppointmentsByBarberId(barberId).stream()
-                .map(a -> AppointmentMapper.appointmentToResponse(a))
+                .map(AppointmentMapper::appointmentToResponse)
                 .collect(Collectors.toList());
     }
 
@@ -132,7 +132,7 @@ public class AppointmentServiceImpl implements AppointmentService {
             Integer day, Integer month, Integer year, Long barberId) {
         return this.repository
                 .findAppointmentsByDateAndBarberId(day, month, year, barberId).stream()
-                .map(a -> AppointmentMapper.appointmentToResponse(a))
+                .map(AppointmentMapper::appointmentToResponse)
                 .collect(Collectors.toList());
     }
 }
