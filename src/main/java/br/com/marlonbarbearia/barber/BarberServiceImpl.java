@@ -1,5 +1,6 @@
 package br.com.marlonbarbearia.barber;
 
+import br.com.marlonbarbearia.exceptions.ObjectAlreadyExistsException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.ObjectNotFoundException;
@@ -23,26 +24,43 @@ public class BarberServiceImpl implements BarberService {
 
     @Override
     public BarberResponse findBarberById(Long barberId) {
-        return null;
+        Optional<BarberResponse> barberOptional = repository.findBarberById(barberId);
+        return barberOptional.orElseThrow(
+                () -> new ObjectNotFoundException(barberId, Barber.class.getSimpleName()
+        ));
     }
 
     @Override
     public List<BarberResponse> findAllBarbers() {
-        return null;
+        List<BarberResponse> barbers = repository.findAllBarbers();
+        return barbers;
     }
 
     @Override
     public Barber findBarberEntityByPhoneNumber(String phoneNumber) {
-        return null;
+        Optional<Barber> barberOptional = this.repository.findBarberEntityByPhoneNumber(phoneNumber);
+        return barberOptional.orElseThrow(
+                () -> new ObjectNotFoundException(phoneNumber, Barber.class.getSimpleName()
+                ));
     }
 
     @Override
-    public void deleteBarberById(Long BarberId) {
-
+    public void deleteBarberById(Long barberId) {
+        this.findBarberById(barberId);
+        this.repository.deleteById(barberId);
     }
 
     @Override
     public void createNewBarber(BarberRequest barberRequest) {
-
+        if(this.findBarberEntityByPhoneNumber(barberRequest.phoneNumber()) != null) {
+            throw new ObjectAlreadyExistsException("Phone number [" + barberRequest.phoneNumber() + "] is already taken");
+        }
+        this.repository.save(
+                Barber.builder()
+                        .name(barberRequest.name())
+                        .lastName(barberRequest.lastName())
+                        .phoneNumber(barberRequest.phoneNumber())
+                        .build()
+        );
     }
 }
