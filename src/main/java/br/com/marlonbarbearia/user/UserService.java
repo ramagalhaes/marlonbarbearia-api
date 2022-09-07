@@ -1,5 +1,6 @@
 package br.com.marlonbarbearia.user;
 
+import br.com.marlonbarbearia.barber.BarberRequest;
 import br.com.marlonbarbearia.barber.BarberService;
 import br.com.marlonbarbearia.customer.CustomerRequest;
 import br.com.marlonbarbearia.customer.CustomerService;
@@ -21,60 +22,44 @@ public class UserService {
     private final BarberService barberService;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public Boolean isPhoneNumberTaken(String phoneNumber) {
+    public void isPhoneNumberTaken(String phoneNumber) {
         Optional<User> userOptional = this.userRepository.findUserByPhoneNumber(phoneNumber);
-        if(userOptional.isPresent()) { return true; }
-        return false;
+        if(userOptional.isPresent()) { throw new ObjectAlreadyExistsException("Phone Number: ["+ phoneNumber +"] is taken!"); }
     }
 
     public void createNewCustomer(CreateUserRequest userRequest) {
-       if(isPhoneNumberTaken(userRequest.phoneNumber())) {
-           throw new ObjectAlreadyExistsException("Phone Number: [] is taken!");
-       }
-       String name = userRequest.name();
-       String lastName = userRequest.lastName();
-       String phoneNumber = userRequest.phoneNumber();
-        this.userRepository.save(
-                User.builder()
-                        .name(name)
-                        .lastName(lastName)
-                        .phoneNumber(phoneNumber)
-                        .password(passwordEncoder.encode(userRequest.password()))
-                        .roles(Set.of(UserType.CUSTOMER))
-                        .build()
-        );
-       this.customerService.createCustomer(
+        this.createNewUser(userRequest, UserType.CUSTOMER);
+        this.customerService.createCustomer(
                CustomerRequest.builder()
-                       .name(name)
-                       .lastName(lastName)
-                       .phoneNumber(phoneNumber)
+                       .name(userRequest.name())
+                       .lastName(userRequest.lastName())
+                       .phoneNumber(userRequest.phoneNumber())
                        .build()
-       );
+        );
     }
 
-//    public void createNewBarber(CreateUserRequest userRequest) {
-//        if(findUserByPhoneNumber(userRequest.phoneNumber()) != null) {
-//            throw new ObjectAlreadyExistsException("User with: [] already exists!");
-//        }
-//        String name = userRequest.name();
-//        String lastName = userRequest.lastName();
-//        String phoneNumber = userRequest.phoneNumber();
-//        this.userRepository.save(
-//                User.builder()
-//                        .name(name)
-//                        .lastName(lastName)
-//                        .phoneNumber(phoneNumber)
-//                        .password(passwordEncoder.encode(userRequest.password()))
-//                        .roles(Set.of(UserType.CUSTOMER))
-//                        .build()
-//        );
-//        this.barberService.(
-//                CustomerRequest.builder()
-//                        .name(name)
-//                        .lastName(lastName)
-//                        .phoneNumber(phoneNumber)
-//                        .build()
-//        );
-//    }
+    public void createNewBarber(CreateUserRequest userRequest) {
+        createNewUser(userRequest, UserType.BARBER);
+        barberService.createNewBarber(
+                BarberRequest.builder()
+                        .name(userRequest.name())
+                        .lastName(userRequest.lastName())
+                        .phoneNumber(userRequest.phoneNumber())
+                        .build()
+        );
+    }
+
+    private void createNewUser(CreateUserRequest userRequest, UserType userType) {
+        isPhoneNumberTaken(userRequest.phoneNumber());
+        this.userRepository.save(
+                User.builder()
+                        .name(userRequest.name())
+                        .lastName(userRequest.lastName())
+                        .phoneNumber(userRequest.phoneNumber())
+                        .password(passwordEncoder.encode(userRequest.password()))
+                        .roles(Set.of(userType))
+                        .build()
+        );
+    }
 
 }

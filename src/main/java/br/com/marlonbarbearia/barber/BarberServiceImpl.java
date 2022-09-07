@@ -52,7 +52,7 @@ public class BarberServiceImpl implements BarberService {
 
     @Override
     public void createNewBarber(BarberRequest barberRequest) {
-        if(this.findBarberEntityByPhoneNumber(barberRequest.phoneNumber()) != null) {
+        if(this.repository.findBarberEntityByPhoneNumber(barberRequest.phoneNumber()).isPresent()) {
             throw new ObjectAlreadyExistsException("Phone number [" + barberRequest.phoneNumber() + "] is already taken");
         }
         this.repository.save(

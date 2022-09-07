@@ -21,9 +21,9 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-//    @PostMapping("/barber")
-//    public ResponseEntity<Void> createNewBarber(@RequestBody CreateUserRequest userRequest) {
-////        this.userService.createNewBarber(userRequest);
-//        return ResponseEntity.status(HttpStatus.CREATED).build();
-//    }
+    @PostMapping("/barber")
+    public ResponseEntity<Void> createNewBarber(@RequestBody CreateUserRequest userRequest) {
+        this.userService.createNewBarber(userRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
 }
