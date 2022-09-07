@@ -7,6 +7,7 @@ import br.com.marlonbarbearia.customer.CustomerService;
 import br.com.marlonbarbearia.enums.UserType;
 import br.com.marlonbarbearia.exceptions.ObjectAlreadyExistsException;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.util.Set;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class UserService {
 
     private final UserRepository userRepository;
@@ -60,6 +62,7 @@ public class UserService {
                         .roles(Set.of(userType))
                         .build()
         );
+        log.info("Creating user {}", userRequest.phoneNumber());
     }
 
 }

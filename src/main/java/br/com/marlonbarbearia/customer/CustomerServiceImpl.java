@@ -58,6 +58,7 @@ public class CustomerServiceImpl implements CustomerService {
                 .phoneNumber(request.phoneNumber())
                 .build()
         );
+        log.info("Creating customer from {}", request);
     }
 
     @Override

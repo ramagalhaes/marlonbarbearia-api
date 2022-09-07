@@ -62,5 +62,6 @@ public class BarberServiceImpl implements BarberService {
                         .phoneNumber(barberRequest.phoneNumber())
                         .build()
         );
+        log.info("Creating barber from {}", barberRequest);
     }
 }
