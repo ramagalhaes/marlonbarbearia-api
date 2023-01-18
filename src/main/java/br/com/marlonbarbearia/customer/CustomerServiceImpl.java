@@ -19,12 +19,14 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer findCustomerEntityById(Long customerId) {
+        log.info("CustomerServiceImpl::findCustomerEntityById() Finding customer with id {}" , customerId);
         return repository.findById(customerId)
                 .orElseThrow(() -> new ObjectNotFoundException(customerId, Customer.class.getSimpleName()));
     }
 
     @Override
     public CustomerResponse findCustomerById(Long customerId) {
+        log.info("CustomerServiceImpl::findCustomerById() Finding customer with id {}" , customerId);
         Optional<Customer> customerOptional = repository.findCustomerById(customerId);
         if(customerOptional.isEmpty()) {
             throw new ObjectNotFoundException(customerId, Customer.class.getSimpleName());
@@ -34,6 +36,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<CustomerResponse> findAllCustomers() {
+        log.info("CustomerServiceImpl::findAllCustomers() Finding all customers");
         return repository.findAllCustomers()
                 .stream()
                 .map(CustomerMapper::customerEntityToResponse)
@@ -42,12 +45,15 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void deleteCustomer(Long customerId) {
+        log.info("CustomerServiceImpl::deleteCustomerById() Deleting customer with id {}" , customerId);
         repository.deleteById(customerId);
     }
 
     @Override
     public void createCustomer(CustomerRequest request) {
-        if(repository.findCustomerByPhoneNumber(request.phoneNumber()).isPresent()){
+        log.info("CustomerServiceImpl::createCustomer() Creating customer from {}", request);
+        boolean phoneNumberIsTaken = repository.findCustomerByPhoneNumber(request.phoneNumber()).isPresent();
+        if(phoneNumberIsTaken){
             throw new ObjectAlreadyExistsException
                     ("Customer with phone number: [" + request.phoneNumber() + "] already exists");
         }
@@ -57,11 +63,12 @@ public class CustomerServiceImpl implements CustomerService {
                 .phoneNumber(request.phoneNumber())
                 .build()
         );
-        log.info("Creating customer from {}", request);
+        log.info("CustomerServiceImpl::createCustomer() Customer created {}", request);
     }
 
     @Override
     public CustomerResponse findCustomerByPhoneNumber(String phoneNumber) {
+        log.info("CustomerServiceImpl::findCustomerByPhoneNumber() Finding customer with phone number {}", phoneNumber);
         Optional<Customer> customerOptional = repository.findCustomerByPhoneNumber(phoneNumber);
         if(customerOptional.isEmpty()) {
             throw new ObjectNotFoundException(phoneNumber, Customer.class.getSimpleName());
