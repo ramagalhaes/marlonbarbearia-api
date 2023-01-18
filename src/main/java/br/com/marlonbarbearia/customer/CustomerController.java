@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/customers")
+@RequestMapping("/v1/customers")
 @AllArgsConstructor
 public class CustomerController {
 
@@ -16,13 +16,13 @@ public class CustomerController {
 
     @GetMapping("/{customerId}")
     public ResponseEntity<CustomerResponse> findCustomerById(@PathVariable("customerId") Long customerId) {
-        CustomerResponse response = this.service.findCustomerById(customerId);
+        CustomerResponse response = service.findCustomerById(customerId);
         return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/phone-number/{phoneNumber}")
     public ResponseEntity<CustomerResponse> findCustomerByPhoneNumber(@PathVariable("phoneNumber") String phoneNumber) {
-        CustomerResponse response = this.service.findCustomerByPhoneNumber(phoneNumber);
+        CustomerResponse response = service.findCustomerByPhoneNumber(phoneNumber);
         return ResponseEntity.ok().body(response);
     }
 }

@@ -25,8 +25,6 @@ public class MarlonBarbeariaApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
         this.userRepository.save(
                 User.builder()
-                        .name("Raphael")
-                        .lastName("Magalhaes")
                         .phoneNumber("33994135")
                         .roles(Set.of(UserType.CUSTOMER))
                         .password(pe.encode("1234"))

@@ -19,12 +19,13 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer findCustomerEntityById(Long customerId) {
-        return this.repository.findById(customerId)
+        return repository.findById(customerId)
                 .orElseThrow(() -> new ObjectNotFoundException(customerId, Customer.class.getSimpleName()));
     }
 
+    @Override
     public CustomerResponse findCustomerById(Long customerId) {
-        Optional<Customer> customerOptional = this.repository.findCustomerById(customerId);
+        Optional<Customer> customerOptional = repository.findCustomerById(customerId);
         if(customerOptional.isEmpty()) {
             throw new ObjectNotFoundException(customerId, Customer.class.getSimpleName());
         }
@@ -33,7 +34,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<CustomerResponse> findAllCustomers() {
-        return this.repository.findAllCustomers()
+        return repository.findAllCustomers()
                 .stream()
                 .map(CustomerMapper::customerEntityToResponse)
                 .collect(Collectors.toList());
@@ -41,16 +42,16 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void deleteCustomer(Long customerId) {
-        this.repository.deleteById(customerId);
+        repository.deleteById(customerId);
     }
 
     @Override
     public void createCustomer(CustomerRequest request) {
-        if(this.repository.findCustomerByPhoneNumber(request.phoneNumber()).isPresent()){
+        if(repository.findCustomerByPhoneNumber(request.phoneNumber()).isPresent()){
             throw new ObjectAlreadyExistsException
                     ("Customer with phone number: [" + request.phoneNumber() + "] already exists");
         }
-        this.repository.save(Customer.builder()
+        repository.save(Customer.builder()
                 .name(request.name())
                 .lastName(request.lastName())
                 .phoneNumber(request.phoneNumber())
@@ -61,7 +62,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerResponse findCustomerByPhoneNumber(String phoneNumber) {
-        Optional<Customer> customerOptional = this.repository.findCustomerByPhoneNumber(phoneNumber);
+        Optional<Customer> customerOptional = repository.findCustomerByPhoneNumber(phoneNumber);
         if(customerOptional.isEmpty()) {
             throw new ObjectNotFoundException(phoneNumber, Customer.class.getSimpleName());
         }
@@ -71,3 +72,4 @@ public class CustomerServiceImpl implements CustomerService {
 
 
 //TODO: enviar msg por wpp
+

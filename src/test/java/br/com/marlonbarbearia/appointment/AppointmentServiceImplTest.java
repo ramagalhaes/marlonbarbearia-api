@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.time.Clock;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,16 +23,24 @@ class AppointmentServiceImplTest {
     @Mock
     private CustomerService customerService;
 
+    @Mock
     private BarberService barberService;
 
+    @Mock
     private HairJobService hairJobService;
 
+    @Mock
     private AppointmentService underTest;
+    
+    @Mock
+    private Clock clock;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        underTest = new AppointmentServiceImpl(repository, barberService, customerService, hairJobService);
+        underTest = new AppointmentServiceImpl(
+                repository, barberService, customerService, hairJobService, clock
+        );
     }
 
     @Test

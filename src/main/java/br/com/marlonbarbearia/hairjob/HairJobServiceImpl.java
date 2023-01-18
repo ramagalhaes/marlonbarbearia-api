@@ -18,29 +18,29 @@ public class HairJobServiceImpl implements HairJobService {
 
     @Override
     public HairJobResponse findHairJobById(Long hairJobId) {
-        return this.repository.findHairJobById(hairJobId)
+        return repository.findHairJobById(hairJobId)
                 .orElseThrow(() -> new ObjectNotFoundException(hairJobId, HairJob.class.getSimpleName()));
     }
 
     @Override
     public HairJob findHairJobEntityById(Long hairJobId) {
-        return this.repository.findById(hairJobId)
+        return repository.findById(hairJobId)
                 .orElseThrow(() -> new ObjectNotFoundException(hairJobId, HairJob.class.getSimpleName()));
     }
 
     private Optional<HairJobResponse> findHairJobByHairJobName(String hairJobName) {
-        return this.repository.findHairJobByHairJobName(hairJobName);
+        return repository.findHairJobByHairJobName(hairJobName);
     }
 
     @Override
     public List<HairJobResponse> findAllHairJobs() {
-        return this.repository.findAllHairJobs();
+        return repository.findAllHairJobs();
     }
 
     @Override
     public void editHairJob(Long hairJobId, HairJobRequest hairJobRequest) {
-        HairJob existingHairJob = this.findHairJobEntityById(hairJobId);
-        this.repository.save(
+        HairJob existingHairJob = findHairJobEntityById(hairJobId);
+        repository.save(
                 HairJob.builder()
                         .id(existingHairJob.getId())
                         .name(hairJobRequest.name())
@@ -52,10 +52,10 @@ public class HairJobServiceImpl implements HairJobService {
 
     @Override
     public void createHairJob(HairJobRequest hairJobRequest) {
-        if(!this.findHairJobByHairJobName(hairJobRequest.name()).isEmpty()) {
+        if(!findHairJobByHairJobName(hairJobRequest.name()).isEmpty()) {
             throw new ObjectAlreadyExistsException("Hairjob with name: [" + hairJobRequest.name() + "] already exists");
         }
-        this.repository.save(
+        repository.save(
                 HairJob.builder()
                         .name(hairJobRequest.name())
                         .price(hairJobRequest.price())
@@ -66,8 +66,8 @@ public class HairJobServiceImpl implements HairJobService {
 
     @Override
     public void deleteHairJob(Long hairJobId) {
-        this.repository.findHairJobById(hairJobId);
-        this.repository.deleteById(hairJobId);
+        repository.findHairJobById(hairJobId);
+        repository.deleteById(hairJobId);
     }
 
 }

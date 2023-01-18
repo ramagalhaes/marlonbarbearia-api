@@ -21,7 +21,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = this.findUserByPhoneNumber(username);
+        User user = findUserByPhoneNumber(username);
         return UserSpringSecurity.builder()
                 .id(user.getId())
                 .password(user.getPassword())
@@ -36,7 +36,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     public User findUserByPhoneNumber(String phoneNumber) {
-        Optional<User> userOptional = this.userRepository.findUserByPhoneNumber(phoneNumber);
+        Optional<User> userOptional = userRepository.findUserByPhoneNumber(phoneNumber);
         return userOptional.orElseThrow(
                 () -> new ObjectNotFoundException(phoneNumber, User.class.getSimpleName())
         );

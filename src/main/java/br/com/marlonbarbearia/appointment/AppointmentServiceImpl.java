@@ -7,12 +7,13 @@ import br.com.marlonbarbearia.customer.CustomerService;
 import br.com.marlonbarbearia.exceptions.DateException;
 import br.com.marlonbarbearia.hairjob.HairJob;
 import br.com.marlonbarbearia.hairjob.HairJobService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +21,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Slf4j
 public class AppointmentServiceImpl implements AppointmentService {
 
@@ -30,9 +31,11 @@ public class AppointmentServiceImpl implements AppointmentService {
     private final CustomerService customerService;
     private final HairJobService hairJobService;
 
+    private final Clock clock;
+
     @Override
     public List<AppointmentResponse> findAllAppointments() {
-        return this.repository.findAllAppointments()
+        return repository.findAllAppointments()
                 .stream()
                 .map(AppointmentMapper::appointmentToResponse)
                 .collect(Collectors.toList());
@@ -40,7 +43,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public AppointmentResponse findAppointmentById(Long appointmentId) {
-        Optional<Appointment> responseOptional = this.repository.findAppointmentById(appointmentId);
+        Optional<Appointment> responseOptional = repository.findAppointmentById(appointmentId);
         if(responseOptional.isEmpty()) {
             throw new ObjectNotFoundException(appointmentId, Appointment.class.getSimpleName());
         }
@@ -49,7 +52,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public void deleteAppointmentById(Long appointmentId) {
-        this.repository.deleteById(appointmentId);
+        repository.deleteById(appointmentId);
     }
 
     @Override
@@ -58,22 +61,21 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public Boolean isAppointmentWithoutRangeOfExistingAppointments(AppointmentRequest newAppointment) {
-        int newAppointmentDay = newAppointment.date().getDayOfMonth();
-        int newAppointmentMonth = newAppointment.date().getMonthValue();
-        int newAppointmentYear = newAppointment.date().getYear();
-        long newAppointmentBarber = newAppointment.barberId();
+    public Boolean appointmentHasTimeConflict(LocalDateTime appointmentDate, Long barberId) {
+        int newAppointmentDay = appointmentDate.getDayOfMonth();
+        int newAppointmentMonth = appointmentDate.getMonthValue();
+        int newAppointmentYear = appointmentDate.getYear();
 
-        List<Appointment> existingAppointments = this.repository.findAppointmentsByDateAndBarberId(
-                newAppointmentDay, newAppointmentMonth, newAppointmentYear, newAppointmentBarber
+        List<Appointment> existingAppointments = repository.findAppointmentsByDateAndBarberId(
+                newAppointmentDay, newAppointmentMonth, newAppointmentYear, barberId
         );
         if(!existingAppointments.isEmpty()) {
             for (Appointment appointment : existingAppointments) {
-                boolean newAppointmentStartsBeforeExisting = newAppointment.date().isBefore(appointment.getDate());
-                boolean newAppointmentEndsBeforeExistingStarts = newAppointment
-                        .date().plusMinutes(45).isBefore(appointment.getDate());
-                boolean newAppointmentStartsAfterExistingEnds = newAppointment
-                        .date().isAfter(appointment.getDate().plusMinutes(45));
+                boolean newAppointmentStartsBeforeExisting = appointmentDate.isBefore(appointment.getDate());
+                boolean newAppointmentEndsBeforeExistingStarts = appointmentDate
+                        .plusMinutes(45).isBefore(appointment.getDate());
+                boolean newAppointmentStartsAfterExistingEnds = appointmentDate
+                        .isAfter(appointment.getDate().plusMinutes(45));
 
                 if (!((newAppointmentStartsBeforeExisting && newAppointmentEndsBeforeExistingStarts) ||
                         newAppointmentStartsAfterExistingEnds)) {
@@ -86,14 +88,14 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public void createAppointment(AppointmentRequest request) {
-        if(!isAppointmentWithoutRangeOfExistingAppointments(request)) {
+        if(!appointmentHasTimeConflict(request.date(), request.barberId())) {
             throw new DateException("The date: [" + request.date() + "] is already taken");
         }
-        Barber barber = this.barberService.findBarberEntityById(request.barberId());
-        Customer customer = this.customerService.findCustomerEntityById(request.customerId());
+        Barber barber = barberService.findBarberEntityById(request.barberId());
+        Customer customer = customerService.findCustomerEntityById(request.customerId());
         Set<HairJob> hairJobs = request.hairJobs()
                 .stream()
-                .map(this.hairJobService::findHairJobEntityById)
+                .map(hairJobService::findHairJobEntityById)
                 .collect(Collectors.toSet());
         BigDecimal totalPrice = hairJobs
                 .stream()
@@ -101,10 +103,10 @@ public class AppointmentServiceImpl implements AppointmentService {
         int totalDurationInMinutes = hairJobs.stream()
                 .reduce(0, (acc, curr) -> Integer.sum(acc, curr.getDurationInMinutes()), Integer::sum);
 
-        this.repository.save(
+        repository.save(
                 Appointment.builder()
                         .date(request.date())
-                        .createdAt(LocalDateTime.now())
+                        .createdAt(LocalDateTime.now(clock))
                         .barber(barber)
                         .customer(customer)
                         .hairJobs(hairJobs)
@@ -115,14 +117,16 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public List<AppointmentResponse> findAppointmentsByDate(Integer day, Integer month, Integer year) {
-        return this.repository.findAppointmentsByDate(day, month, year).stream()
+        return repository.findAppointmentsByDate(day, month, year)
+                .stream()
                 .map(AppointmentMapper::appointmentToResponse)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<AppointmentResponse> findAllAppointmentsByBarber(Long barberId) {
-        return this.repository.findAllAppointmentsByBarberId(barberId).stream()
+        return repository.findAllAppointmentsByBarberId(barberId)
+                .stream()
                 .map(AppointmentMapper::appointmentToResponse)
                 .collect(Collectors.toList());
     }
@@ -130,8 +134,9 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public List<AppointmentResponse> findAllAppointmentsByDateAndBarber(
             Integer day, Integer month, Integer year, Long barberId) {
-        return this.repository
-                .findAppointmentsByDateAndBarberId(day, month, year, barberId).stream()
+        return repository
+                .findAppointmentsByDateAndBarberId(day, month, year, barberId)
+                .stream()
                 .map(AppointmentMapper::appointmentToResponse)
                 .collect(Collectors.toList());
     }

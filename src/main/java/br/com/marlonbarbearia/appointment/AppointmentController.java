@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/appointments")
+@RequestMapping("/v1/appointments")
 @AllArgsConstructor
 public class AppointmentController {
 
@@ -17,32 +17,32 @@ public class AppointmentController {
 
     @PostMapping
     ResponseEntity<Void> createAppointment(@RequestBody AppointmentRequest appointmentRequest) {
-        this.service.createAppointment(appointmentRequest);
+        service.createAppointment(appointmentRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @DeleteMapping("/{appointmentId}")
     ResponseEntity<Void> deleteAppointment(@PathVariable("appointmentId") Long appointmentId) {
-        this.service.deleteAppointmentById(appointmentId);
+        service.deleteAppointmentById(appointmentId);
         return ResponseEntity.noContent().build();
     }
 
     @PreAuthorize("hasAnyRole('BARBER')")
     @GetMapping
     ResponseEntity<List<AppointmentResponse>> findAllAppointments() {
-        List<AppointmentResponse> appointments = this.service.findAllAppointments();
+        List<AppointmentResponse> appointments = service.findAllAppointments();
         return ResponseEntity.ok().body(appointments);
     }
 
     @GetMapping("/{appointmentId}")
     ResponseEntity<AppointmentResponse> findAppointmentById(@PathVariable("appointmentId") Long appointmentId) {
-        AppointmentResponse appointment = this.service.findAppointmentById(appointmentId);
+        AppointmentResponse appointment = service.findAppointmentById(appointmentId);
         return ResponseEntity.ok().body(appointment);
     }
 
-    @GetMapping("/barber/{barberId}")
-    ResponseEntity<List<AppointmentResponse>> findAllAppointmentsByBarber(@PathVariable("barberId") Long barberId) {
-        List<AppointmentResponse> response = this.service.findAllAppointmentsByBarber(barberId);
+    @GetMapping("/barber")
+    ResponseEntity<List<AppointmentResponse>> findAllAppointmentsByBarber(@RequestParam("barber-id") Long barberId) {
+        List<AppointmentResponse> response = service.findAllAppointmentsByBarber(barberId);
         return ResponseEntity.ok().body(response);
     }
 
@@ -51,7 +51,7 @@ public class AppointmentController {
                                                                               @RequestParam("day") Integer day,
                                                                               @RequestParam("month") Integer month,
                                                                               @RequestParam("year") Integer year) {
-        List<AppointmentResponse> list = this.service.findAllAppointmentsByDateAndBarber(day, month, year, barberId);
+        List<AppointmentResponse> list = service.findAllAppointmentsByDateAndBarber(day, month, year, barberId);
         return ResponseEntity.ok().body(list);
     }
 
@@ -59,8 +59,7 @@ public class AppointmentController {
     ResponseEntity<List<AppointmentResponse>> findAppointmentsByDate(@RequestParam("day") Integer day,
                                                                         @RequestParam("month") Integer month,
                                                                         @RequestParam("year") Integer year) {
-        List<AppointmentResponse> list = this.service.findAppointmentsByDate(day, month, year);
+        List<AppointmentResponse> list = service.findAppointmentsByDate(day, month, year);
         return ResponseEntity.ok().body(list);
     }
-
 }

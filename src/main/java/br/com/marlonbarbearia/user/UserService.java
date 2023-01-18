@@ -6,8 +6,10 @@ import br.com.marlonbarbearia.customer.CustomerRequest;
 import br.com.marlonbarbearia.customer.CustomerService;
 import br.com.marlonbarbearia.enums.UserType;
 import br.com.marlonbarbearia.exceptions.ObjectAlreadyExistsException;
-import lombok.AllArgsConstructor;
+import br.com.marlonbarbearia.security.UserSpringSecurity;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +17,9 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Slf4j
-public class UserService {
+public class UserService{
 
     private final UserRepository userRepository;
     private final CustomerService customerService;
@@ -25,13 +27,13 @@ public class UserService {
     private final BCryptPasswordEncoder passwordEncoder;
 
     public void isPhoneNumberTaken(String phoneNumber) {
-        Optional<User> userOptional = this.userRepository.findUserByPhoneNumber(phoneNumber);
+        Optional<User> userOptional = userRepository.findUserByPhoneNumber(phoneNumber);
         if(userOptional.isPresent()) { throw new ObjectAlreadyExistsException("Phone Number: ["+ phoneNumber +"] is taken!"); }
     }
 
     public void createNewCustomer(CreateUserRequest userRequest) {
-        this.createNewUser(userRequest, UserType.CUSTOMER);
-        this.customerService.createCustomer(
+        createNewUser(userRequest, UserType.CUSTOMER);
+        customerService.createCustomer(
                CustomerRequest.builder()
                        .name(userRequest.name())
                        .lastName(userRequest.lastName())
@@ -53,16 +55,22 @@ public class UserService {
 
     private void createNewUser(CreateUserRequest userRequest, UserType userType) {
         isPhoneNumberTaken(userRequest.phoneNumber());
-        this.userRepository.save(
+        userRepository.save(
                 User.builder()
-                        .name(userRequest.name())
-                        .lastName(userRequest.lastName())
                         .phoneNumber(userRequest.phoneNumber())
                         .password(passwordEncoder.encode(userRequest.password()))
                         .roles(Set.of(userType))
                         .build()
         );
         log.info("Creating user {}", userRequest.phoneNumber());
+    }
+
+    public static UserSpringSecurity getAuthenticatedUser() {
+        try {
+            return (UserSpringSecurity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 }

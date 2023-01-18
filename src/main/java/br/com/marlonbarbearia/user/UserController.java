@@ -10,20 +10,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping("/v1/users")
 public class UserController {
 
     private final UserService userService;
 
     @PostMapping("/customer")
     public ResponseEntity<Void> createNewUser(@RequestBody CreateUserRequest userRequest) {
-        this.userService.createNewCustomer(userRequest);
+        userService.createNewCustomer(userRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PostMapping("/barber")
     public ResponseEntity<Void> createNewBarber(@RequestBody CreateUserRequest userRequest) {
-        this.userService.createNewBarber(userRequest);
+        userService.createNewBarber(userRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

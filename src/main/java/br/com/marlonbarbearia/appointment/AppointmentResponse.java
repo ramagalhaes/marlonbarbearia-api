@@ -19,7 +19,8 @@ public record AppointmentResponse(
         Integer durationInMinutes,
         LocalDateTime endTime,
         Set<HairJobResponse> hairJobs,
-        BigDecimal price
+        BigDecimal price,
+        LocalDateTime updatedAt
 ) {
     @Override
     public LocalDateTime endTime() {

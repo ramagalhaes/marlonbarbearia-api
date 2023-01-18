@@ -1,5 +1,6 @@
 package br.com.marlonbarbearia.appointment;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface AppointmentService {
@@ -8,7 +9,7 @@ public interface AppointmentService {
 	AppointmentResponse findAppointmentById(Long appointmentId);
 	void deleteAppointmentById(Long appointmentId);
 	AppointmentResponse updateAppointment(Long appointmentId, AppointmentRequest appointment);
-	Boolean isAppointmentWithoutRangeOfExistingAppointments(AppointmentRequest newAppointment);
+	Boolean appointmentHasTimeConflict(LocalDateTime appointmentDate, Long barberId);
 	void createAppointment(AppointmentRequest request);
 	List<AppointmentResponse> findAppointmentsByDate(Integer day, Integer month, Integer year);
 	List<AppointmentResponse> findAllAppointmentsByBarber(Long barberId);

@@ -26,6 +26,7 @@ public class AppointmentMapper {
                                 .build()
                         ).collect(Collectors.toSet()))
                 .price(appointment.getPrice())
+                .updatedAt(appointment.getUpdatedAt())
                 .build();
     }
 

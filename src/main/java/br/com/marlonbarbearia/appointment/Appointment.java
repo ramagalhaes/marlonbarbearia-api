@@ -36,6 +36,7 @@ public class Appointment {
     private LocalDateTime date;
     private Integer durationInMinutes;
     private BigDecimal price;
+    private LocalDateTime updatedAt;
 
     @ManyToMany
     @JoinTable(
