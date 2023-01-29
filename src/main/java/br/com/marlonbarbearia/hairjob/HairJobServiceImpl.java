@@ -17,7 +17,7 @@ public class HairJobServiceImpl implements HairJobService {
     private final HairJobRepository repository;
 
     @Override
-    public HairJobResponse findHairJobById(Long hairJobId) {
+    public HairJobDTO findHairJobById(Long hairJobId) {
         return repository.findHairJobById(hairJobId)
                 .orElseThrow(() -> new ObjectNotFoundException(hairJobId, HairJob.class.getSimpleName()));
     }
@@ -28,12 +28,12 @@ public class HairJobServiceImpl implements HairJobService {
                 .orElseThrow(() -> new ObjectNotFoundException(hairJobId, HairJob.class.getSimpleName()));
     }
 
-    private Optional<HairJobResponse> findHairJobByHairJobName(String hairJobName) {
+    private Optional<HairJobDTO> findHairJobByHairJobName(String hairJobName) {
         return repository.findHairJobByHairJobName(hairJobName);
     }
 
     @Override
-    public List<HairJobResponse> findAllHairJobs() {
+    public List<HairJobDTO> findAllHairJobs() {
         return repository.findAllHairJobs();
     }
 

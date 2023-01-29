@@ -1,6 +1,6 @@
 package br.com.marlonbarbearia.appointment;
 
-import br.com.marlonbarbearia.hairjob.HairJobResponse;
+import br.com.marlonbarbearia.hairjob.HairJobDTO;
 
 import java.util.stream.Collectors;
 
@@ -22,7 +22,7 @@ public class AppointmentMapper {
                 .durationInMinutes(appointment.getDurationInMinutes())
                 .endTime(appointment.getDate().plusMinutes(appointment.getDurationInMinutes()))
                 .hairJobs(appointment.getHairJobs().stream()
-                        .map(h -> HairJobResponse.builder()
+                        .map(h -> HairJobDTO.builder()
                                 .id(h.getId())
                                 .durationInMinutes(h.getDurationInMinutes())
                                 .name(h.getName())

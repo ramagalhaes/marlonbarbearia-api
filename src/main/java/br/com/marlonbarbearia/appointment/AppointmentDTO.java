@@ -1,6 +1,6 @@
 package br.com.marlonbarbearia.appointment;
 
-import br.com.marlonbarbearia.hairjob.HairJobResponse;
+import br.com.marlonbarbearia.hairjob.HairJobDTO;
 import lombok.Builder;
 
 import java.math.BigDecimal;
@@ -18,7 +18,7 @@ public record AppointmentDTO(
         LocalDateTime date,
         Integer durationInMinutes,
         LocalDateTime endTime,
-        Set<HairJobResponse> hairJobs,
+        Set<HairJobDTO> hairJobs,
         BigDecimal price,
         LocalDateTime updatedAt
 ) {

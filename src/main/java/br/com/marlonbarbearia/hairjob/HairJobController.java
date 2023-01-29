@@ -28,15 +28,15 @@ public class HairJobController {
     }
 
     @GetMapping
-    public ResponseEntity<List<HairJobResponse>> findAllHairJobs() {
-        List<HairJobResponse> hairJobResponses = service.findAllHairJobs();
+    public ResponseEntity<List<HairJobDTO>> findAllHairJobs() {
+        List<HairJobDTO> hairJobResponses = service.findAllHairJobs();
         return ResponseEntity.ok().body(hairJobResponses);
     }
 
     @GetMapping("/{hairJobId}")
-    public ResponseEntity<HairJobResponse> findHairJobById(@PathVariable("hairJobId") Long hairJobId) {
-        HairJobResponse hairJobResponse = service.findHairJobById(hairJobId);
-        return ResponseEntity.ok().body(hairJobResponse);
+    public ResponseEntity<HairJobDTO> findHairJobById(@PathVariable("hairJobId") Long hairJobId) {
+        HairJobDTO hairJobDTO = service.findHairJobById(hairJobId);
+        return ResponseEntity.ok().body(hairJobDTO);
     }
 
 }
