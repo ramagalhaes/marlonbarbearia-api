@@ -10,8 +10,8 @@ public class AppointmentMapper {
         throw new IllegalStateException("Utility class");
     }
 
-    public static AppointmentResponse appointmentToResponse(Appointment appointment) {
-        return AppointmentResponse.builder()
+    public static AppointmentDTO appointmentToResponse(Appointment appointment) {
+        return AppointmentDTO.builder()
                 .id(appointment.getId())
                 .barberId(appointment.getBarber().getId())
                 .barberName(appointment.getBarber().getName() + " " +appointment.getBarber().getLastName())

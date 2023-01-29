@@ -29,37 +29,37 @@ public class AppointmentController {
 
     @PreAuthorize("hasAnyRole('BARBER')")
     @GetMapping
-    ResponseEntity<List<AppointmentResponse>> findAllAppointments() {
-        List<AppointmentResponse> appointments = service.findAllAppointments();
+    ResponseEntity<List<AppointmentDTO>> findAllAppointments() {
+        List<AppointmentDTO> appointments = service.findAllAppointments();
         return ResponseEntity.ok().body(appointments);
     }
 
     @GetMapping("/{appointmentId}")
-    ResponseEntity<AppointmentResponse> findAppointmentById(@PathVariable("appointmentId") Long appointmentId) {
-        AppointmentResponse appointment = service.findAppointmentById(appointmentId);
+    ResponseEntity<AppointmentDTO> findAppointmentById(@PathVariable("appointmentId") Long appointmentId) {
+        AppointmentDTO appointment = service.findAppointmentById(appointmentId);
         return ResponseEntity.ok().body(appointment);
     }
 
     @GetMapping("/barber")
-    ResponseEntity<List<AppointmentResponse>> findAllAppointmentsByBarber(@RequestParam("barber-id") Long barberId) {
-        List<AppointmentResponse> response = service.findAllAppointmentsByBarber(barberId);
+    ResponseEntity<List<AppointmentDTO>> findAllAppointmentsByBarber(@RequestParam("barber-id") Long barberId) {
+        List<AppointmentDTO> response = service.findAllAppointmentsByBarber(barberId);
         return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/barber/{barberId}/date")
-    ResponseEntity<List<AppointmentResponse>> findAppointmentsByDateAndBarber(@PathVariable("barberId") Long barberId,
-                                                                              @RequestParam("day") Integer day,
-                                                                              @RequestParam("month") Integer month,
-                                                                              @RequestParam("year") Integer year) {
-        List<AppointmentResponse> list = service.findAllAppointmentsByDateAndBarber(day, month, year, barberId);
+    ResponseEntity<List<AppointmentDTO>> findAppointmentsByDateAndBarber(@PathVariable("barberId") Long barberId,
+                                                                         @RequestParam("day") Integer day,
+                                                                         @RequestParam("month") Integer month,
+                                                                         @RequestParam("year") Integer year) {
+        List<AppointmentDTO> list = service.findAllAppointmentsByDateAndBarber(day, month, year, barberId);
         return ResponseEntity.ok().body(list);
     }
 
     @GetMapping("/date")
-    ResponseEntity<List<AppointmentResponse>> findAppointmentsByDate(@RequestParam("day") Integer day,
-                                                                        @RequestParam("month") Integer month,
-                                                                        @RequestParam("year") Integer year) {
-        List<AppointmentResponse> list = service.findAppointmentsByDate(day, month, year);
+    ResponseEntity<List<AppointmentDTO>> findAppointmentsByDate(@RequestParam("day") Integer day,
+                                                                @RequestParam("month") Integer month,
+                                                                @RequestParam("year") Integer year) {
+        List<AppointmentDTO> list = service.findAppointmentsByDate(day, month, year);
         return ResponseEntity.ok().body(list);
     }
 }

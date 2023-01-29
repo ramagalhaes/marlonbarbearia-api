@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 @Builder
-public record AppointmentResponse(
+public record AppointmentDTO(
         Long id,
         Long barberId,
         String barberName,

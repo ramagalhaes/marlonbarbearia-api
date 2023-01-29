@@ -37,7 +37,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     private final Clock clock;
 
     @Override
-    public List<AppointmentResponse> findAllAppointments() {
+    public List<AppointmentDTO> findAllAppointments() {
         return repository.findAllAppointments()
                 .stream()
                 .map(AppointmentMapper::appointmentToResponse)
@@ -45,7 +45,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public AppointmentResponse findAppointmentById(Long appointmentId) {
+    public AppointmentDTO findAppointmentById(Long appointmentId) {
         Optional<Appointment> responseOptional = repository.findAppointmentById(appointmentId);
         if(responseOptional.isEmpty()) {
             throw new ObjectNotFoundException(appointmentId, Appointment.class.getSimpleName());
@@ -59,7 +59,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public AppointmentResponse updateAppointment(Long id, AppointmentRequest appointment) {
+    public AppointmentDTO updateAppointment(Long id, AppointmentRequest appointment) {
         return null;
     }
 
@@ -119,7 +119,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public List<AppointmentResponse> findAppointmentsByDate(Integer day, Integer month, Integer year) {
+    public List<AppointmentDTO> findAppointmentsByDate(Integer day, Integer month, Integer year) {
         return repository.findAppointmentsByDate(day, month, year)
                 .stream()
                 .map(AppointmentMapper::appointmentToResponse)
@@ -127,7 +127,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public List<AppointmentResponse> findAllAppointmentsByBarber(Long barberId) {
+    public List<AppointmentDTO> findAllAppointmentsByBarber(Long barberId) {
         return repository.findAllAppointmentsByBarberId(barberId)
                 .stream()
                 .map(AppointmentMapper::appointmentToResponse)
@@ -135,7 +135,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public List<AppointmentResponse> findAllAppointmentsByDateAndBarber(
+    public List<AppointmentDTO> findAllAppointmentsByDateAndBarber(
             Integer day, Integer month, Integer year, Long barberId) {
         return repository
                 .findAppointmentsByDateAndBarberId(day, month, year, barberId)
