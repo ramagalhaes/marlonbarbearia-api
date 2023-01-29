@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toList;
+
 @Service
 @AllArgsConstructor
 @Slf4j
@@ -40,7 +42,7 @@ public class CustomerServiceImpl implements CustomerService {
         return repository.findAllCustomers()
                 .stream()
                 .map(CustomerMapper::customerEntityToResponse)
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     @Override

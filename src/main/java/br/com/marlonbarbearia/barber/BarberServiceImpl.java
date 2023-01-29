@@ -33,8 +33,7 @@ public class BarberServiceImpl implements BarberService {
 
     @Override
     public List<BarberResponse> findAllBarbers() {
-        List<BarberResponse> barbers = repository.findAllBarbers();
-        return barbers;
+        return repository.findAllBarbers();
     }
 
     @Override

@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
@@ -16,7 +17,9 @@ import java.util.Objects;
 @Setter
 @ToString
 @Entity
-public class Barber {
+public class Barber implements Serializable {
+
+    private static final Long serialVersionUID = 1L;
 
     @SequenceGenerator(name = "sequence_id_barber", sequenceName = "sequence_id_barber")
     @GeneratedValue(generator = "sequence_id_barber")

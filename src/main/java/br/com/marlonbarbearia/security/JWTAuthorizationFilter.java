@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static java.lang.Boolean.FALSE;
+
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
     private final JwtUtil  jwtUtil;
@@ -42,7 +44,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     }
 
     private UsernamePasswordAuthenticationToken getAuthentication(String token) {
-        if(!jwtUtil.isTokenValid(token)) {
+        if(FALSE.equals(jwtUtil.isTokenValid(token))) {
             return null;
         }
         String username = jwtUtil.getUsername(token);

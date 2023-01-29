@@ -6,14 +6,18 @@ import java.util.stream.Collectors;
 
 public class AppointmentMapper {
 
+    private AppointmentMapper() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static AppointmentResponse appointmentToResponse(Appointment appointment) {
         return AppointmentResponse.builder()
                 .id(appointment.getId())
                 .barberId(appointment.getBarber().getId())
-                .barberName(appointment.getBarber().getName() + appointment.getBarber().getLastName())
+                .barberName(appointment.getBarber().getName() + " " +appointment.getBarber().getLastName())
                 .createdAt(appointment.getCreatedAt())
                 .customerId(appointment.getCustomer().getId())
-                .customerName(appointment.getCustomer().getName() + appointment.getCustomer().getLastName())
+                .customerName(appointment.getCustomer().getName() + " " + appointment.getCustomer().getLastName())
                 .date(appointment.getDate())
                 .durationInMinutes(appointment.getDurationInMinutes())
                 .endTime(appointment.getDate().plusMinutes(appointment.getDurationInMinutes()))

@@ -7,6 +7,6 @@ public interface BarberService {
     BarberResponse findBarberById(Long barberId);
     List<BarberResponse> findAllBarbers();
     Barber findBarberEntityByPhoneNumber(String phoneNumber);
-    void deleteBarberById(Long BarberId);
+    void deleteBarberById(Long barberId);
     void createNewBarber(BarberRequest barberRequest);
 }

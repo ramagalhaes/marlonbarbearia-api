@@ -20,6 +20,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static java.lang.Boolean.FALSE;
+import static java.util.stream.Collectors.toList;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -38,7 +41,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         return repository.findAllAppointments()
                 .stream()
                 .map(AppointmentMapper::appointmentToResponse)
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     @Override
@@ -88,7 +91,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public void createAppointment(AppointmentRequest request) {
-        if(!appointmentHasTimeConflict(request.date(), request.barberId())) {
+        if(FALSE.equals(appointmentHasTimeConflict(request.date(), request.barberId()))) {
             throw new DateException("The date: [" + request.date() + "] is already taken");
         }
         Barber barber = barberService.findBarberEntityById(request.barberId());
@@ -120,7 +123,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         return repository.findAppointmentsByDate(day, month, year)
                 .stream()
                 .map(AppointmentMapper::appointmentToResponse)
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     @Override
@@ -128,7 +131,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         return repository.findAllAppointmentsByBarberId(barberId)
                 .stream()
                 .map(AppointmentMapper::appointmentToResponse)
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     @Override
@@ -138,6 +141,6 @@ public class AppointmentServiceImpl implements AppointmentService {
                 .findAppointmentsByDateAndBarberId(day, month, year, barberId)
                 .stream()
                 .map(AppointmentMapper::appointmentToResponse)
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 }

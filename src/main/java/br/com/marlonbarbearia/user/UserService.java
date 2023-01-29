@@ -28,7 +28,9 @@ public class UserService{
 
     public void isPhoneNumberTaken(String phoneNumber) {
         Optional<User> userOptional = userRepository.findUserByPhoneNumber(phoneNumber);
-        if(userOptional.isPresent()) { throw new ObjectAlreadyExistsException("Phone Number: ["+ phoneNumber +"] is taken!"); }
+        if(userOptional.isPresent()) {
+            throw new ObjectAlreadyExistsException("Phone Number: ["+ phoneNumber +"] is taken!");
+        }
     }
 
     public void createNewCustomer(CreateUserRequest userRequest) {
