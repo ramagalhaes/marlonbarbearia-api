@@ -1,7 +1,6 @@
 package br.com.marlonbarbearia.barber;
 
 import br.com.marlonbarbearia.exceptions.ObjectAlreadyExistsException;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.ObjectNotFoundException;
@@ -24,15 +23,15 @@ public class BarberServiceImpl implements BarberService {
     }
 
     @Override
-    public BarberResponse findBarberById(Long barberId) {
-        Optional<BarberResponse> barberOptional = repository.findBarberById(barberId);
+    public BarberDTO findBarberById(Long barberId) {
+        Optional<BarberDTO> barberOptional = repository.findBarberById(barberId);
         return barberOptional.orElseThrow(
                 () -> new ObjectNotFoundException(barberId, Barber.class.getSimpleName()
         ));
     }
 
     @Override
-    public List<BarberResponse> findAllBarbers() {
+    public List<BarberDTO> findAllBarbers() {
         return repository.findAllBarbers();
     }
 

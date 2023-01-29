@@ -17,14 +17,14 @@ public class BarberController {
     private final BarberService service;
 
     @GetMapping("/{barberId}")
-    public ResponseEntity<BarberResponse> findBarberById(@PathVariable("barberId") Long barberId) {
-        BarberResponse barber = service.findBarberById(barberId);
+    public ResponseEntity<BarberDTO> findBarberById(@PathVariable("barberId") Long barberId) {
+        BarberDTO barber = service.findBarberById(barberId);
         return ResponseEntity.ok().body(barber);
     }
 
     @GetMapping
-    public ResponseEntity<List<BarberResponse>> findAllBarbers() {
-        List<BarberResponse> list = service.findAllBarbers();
+    public ResponseEntity<List<BarberDTO>> findAllBarbers() {
+        List<BarberDTO> list = service.findAllBarbers();
         return ResponseEntity.ok().body(list);
     }
 

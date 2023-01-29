@@ -9,19 +9,19 @@ import java.util.Optional;
 
 public interface BarberRepository extends JpaRepository<Barber, Long> {
 
-    @Query("SELECT new br.com.marlonbarbearia.barber.BarberResponse(b.id, b.name, b.lastName, b.phoneNumber) " +
+    @Query("SELECT new br.com.marlonbarbearia.barber.BarberDTO(b.id, b.name, b.lastName, b.phoneNumber) " +
             "FROM Barber b")
-    List<BarberResponse> findAllBarbers();
+    List<BarberDTO> findAllBarbers();
 
-    @Query("SELECT new br.com.marlonbarbearia.barber.BarberResponse(b.id, b.name, b.lastName, b.phoneNumber) " +
+    @Query("SELECT new br.com.marlonbarbearia.barber.BarberDTO(b.id, b.name, b.lastName, b.phoneNumber) " +
             "FROM Barber b " +
             "WHERE b.id = :barberId")
-    Optional<BarberResponse> findBarberById(@Param("barberId") Long barberId);
+    Optional<BarberDTO> findBarberById(@Param("barberId") Long barberId);
 
-    @Query("SELECT new br.com.marlonbarbearia.barber.BarberResponse(b.id, b.name, b.lastName, b.phoneNumber) " +
+    @Query("SELECT new br.com.marlonbarbearia.barber.BarberDTO(b.id, b.name, b.lastName, b.phoneNumber) " +
             "FROM Barber b " +
             "WHERE b.phoneNumber = :phoneNumber")
-    Optional<BarberResponse> findBarberByPhoneNumber(@Param("phoneNumber") String phoneNumber);
+    Optional<BarberDTO> findBarberByPhoneNumber(@Param("phoneNumber") String phoneNumber);
 
     @Query("SELECT b FROM Barber b " +
             "WHERE b.phoneNumber = :phoneNumber")
