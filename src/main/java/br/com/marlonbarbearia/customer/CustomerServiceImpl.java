@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -27,7 +26,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerResponse findCustomerById(Long customerId) {
+    public CustomerDTO findCustomerById(Long customerId) {
         log.info("CustomerServiceImpl::findCustomerById() Finding customer with id {}" , customerId);
         Optional<Customer> customerOptional = repository.findCustomerById(customerId);
         if(customerOptional.isEmpty()) {
@@ -37,7 +36,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<CustomerResponse> findAllCustomers() {
+    public List<CustomerDTO> findAllCustomers() {
         log.info("CustomerServiceImpl::findAllCustomers() Finding all customers");
         return repository.findAllCustomers()
                 .stream()
@@ -69,7 +68,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerResponse findCustomerByPhoneNumber(String phoneNumber) {
+    public CustomerDTO findCustomerByPhoneNumber(String phoneNumber) {
         log.info("CustomerServiceImpl::findCustomerByPhoneNumber() Finding customer with phone number {}", phoneNumber);
         Optional<Customer> customerOptional = repository.findCustomerByPhoneNumber(phoneNumber);
         if(customerOptional.isEmpty()) {

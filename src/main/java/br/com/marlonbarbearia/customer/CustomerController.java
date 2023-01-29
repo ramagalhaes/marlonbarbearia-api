@@ -15,14 +15,14 @@ public class CustomerController {
     private final CustomerService service;
 
     @GetMapping("/{customerId}")
-    public ResponseEntity<CustomerResponse> findCustomerById(@PathVariable("customerId") Long customerId) {
-        CustomerResponse response = service.findCustomerById(customerId);
+    public ResponseEntity<CustomerDTO> findCustomerById(@PathVariable("customerId") Long customerId) {
+        CustomerDTO response = service.findCustomerById(customerId);
         return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/phone-number/{phoneNumber}")
-    public ResponseEntity<CustomerResponse> findCustomerByPhoneNumber(@PathVariable("phoneNumber") String phoneNumber) {
-        CustomerResponse response = service.findCustomerByPhoneNumber(phoneNumber);
+    public ResponseEntity<CustomerDTO> findCustomerByPhoneNumber(@PathVariable("phoneNumber") String phoneNumber) {
+        CustomerDTO response = service.findCustomerByPhoneNumber(phoneNumber);
         return ResponseEntity.ok().body(response);
     }
 }

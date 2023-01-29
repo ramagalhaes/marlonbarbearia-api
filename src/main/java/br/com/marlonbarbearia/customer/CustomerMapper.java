@@ -6,8 +6,8 @@ public class CustomerMapper {
         throw new IllegalStateException("Utility class");
     }
 
-    public static CustomerResponse customerEntityToResponse(Customer customer) {
-        return CustomerResponse.builder()
+    public static CustomerDTO customerEntityToResponse(Customer customer) {
+        return CustomerDTO.builder()
                 .id(customer.getId())
                 .name(customer.getName())
                 .lastName(customer.getLastName())

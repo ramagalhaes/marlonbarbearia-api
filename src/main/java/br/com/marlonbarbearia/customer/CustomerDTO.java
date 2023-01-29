@@ -3,7 +3,7 @@ package br.com.marlonbarbearia.customer;
 import lombok.Builder;
 
 @Builder
-public record CustomerResponse(
+public record CustomerDTO(
         Long id,
         String name,
         String lastName,
