@@ -29,7 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtUtil jwtUtil;
 
     private static final String[] PUBLIC_MATCHERS_POST = {
-            "/api/v1/users/**"
+            "/api/v1/**"
     };
 
     @Override

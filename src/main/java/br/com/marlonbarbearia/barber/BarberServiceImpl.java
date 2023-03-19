@@ -1,13 +1,17 @@
 package br.com.marlonbarbearia.barber;
 
-import br.com.marlonbarbearia.exceptions.ObjectAlreadyExistsException;
+import br.com.marlonbarbearia.enums.UserType;
+import br.com.marlonbarbearia.user.CreateUserRequest;
+import br.com.marlonbarbearia.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.ObjectNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -15,6 +19,8 @@ import java.util.Optional;
 public class BarberServiceImpl implements BarberService {
 
     private final BarberRepository repository;
+    private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
     public Barber findBarberEntityById(Long barberId) {
         Optional<Barber> barberOptional = repository.findById(barberId);
@@ -50,15 +56,15 @@ public class BarberServiceImpl implements BarberService {
     }
 
     @Override
-    public void createNewBarber(BarberRequest barberRequest) {
-        if(repository.findBarberEntityByPhoneNumber(barberRequest.phoneNumber()).isPresent()) {
-            throw new ObjectAlreadyExistsException("Phone number [" + barberRequest.phoneNumber() + "] is already taken");
-        }
+    public void createNewBarber(CreateUserRequest barberRequest) {
+        userService.isPhoneNumberTaken(barberRequest.phoneNumber());
         repository.save(
                 Barber.builder()
                         .name(barberRequest.name())
                         .lastName(barberRequest.lastName())
                         .phoneNumber(barberRequest.phoneNumber())
+                        .password(passwordEncoder.encode(barberRequest.password()))
+                        .roles(Set.of(UserType.BARBER))
                         .build()
         );
         log.info("Creating barber from {}", barberRequest);

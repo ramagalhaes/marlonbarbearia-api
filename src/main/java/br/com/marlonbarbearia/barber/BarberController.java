@@ -1,11 +1,10 @@
 package br.com.marlonbarbearia.barber;
 
+import br.com.marlonbarbearia.user.CreateUserRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,6 +25,12 @@ public class BarberController {
     public ResponseEntity<List<BarberDTO>> findAllBarbers() {
         List<BarberDTO> list = service.findAllBarbers();
         return ResponseEntity.ok().body(list);
+    }
+
+    @PostMapping
+    public ResponseEntity<Void> createNewBarber(@RequestBody CreateUserRequest barberRequest) {
+        service.createNewBarber(barberRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
 }

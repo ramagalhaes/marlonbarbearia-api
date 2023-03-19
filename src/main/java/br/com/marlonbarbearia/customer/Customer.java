@@ -1,33 +1,28 @@
 package br.com.marlonbarbearia.customer;
 
 import br.com.marlonbarbearia.appointment.Appointment;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import br.com.marlonbarbearia.user.User;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.Hibernate;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-public class Customer {
-
-    @SequenceGenerator(name = "sequence_id_customer", sequenceName = "sequence_id_customer")
-    @GeneratedValue(generator = "sequence_id_customer")
-    @Id
-    private Long id;
-    private String name;
-    private String lastName;
-    private String phoneNumber;
+@SuperBuilder
+public class Customer extends User {
 
     @OneToMany(mappedBy = "customer")
-    @JsonIgnore
+    @Transient
     @ToString.Exclude
     private List<Appointment> appointments;
 

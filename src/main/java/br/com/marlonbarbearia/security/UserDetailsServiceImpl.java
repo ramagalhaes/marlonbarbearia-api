@@ -23,16 +23,19 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = findUserByPhoneNumber(username);
-        return UserSpringSecurity.builder()
-                .id(user.getId())
-                .password(user.getPassword())
-                .username(user.getPhoneNumber())
+        return User.builder()
                 .authorities(
                         user.getRoles()
                                 .stream()
                                 .map(role ->  new SimpleGrantedAuthority(role.getDescription()))
                                 .collect(toList())
                 )
+                .id(user.getId())
+                .lastName(user.getLastName())
+                .name(user.getName())
+                .password(user.getPassword())
+                .phoneNumber(user.getPhoneNumber())
+                .roles(user.getRoles())
                 .build();
     }
 

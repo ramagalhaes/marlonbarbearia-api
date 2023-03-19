@@ -16,8 +16,8 @@ public class AppointmentController {
     private final AppointmentService service;
 
     @PostMapping
-    ResponseEntity<Void> createAppointment(@RequestBody AppointmentRequest appointmentRequest) {
-        service.createAppointment(appointmentRequest);
+    ResponseEntity<Void> createAppointment(@RequestBody CreateAppointmentRequest createAppointmentRequest) {
+        service.createAppointment(createAppointmentRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

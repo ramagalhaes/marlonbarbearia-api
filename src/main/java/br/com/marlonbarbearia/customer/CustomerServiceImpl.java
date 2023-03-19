@@ -1,9 +1,11 @@
 package br.com.marlonbarbearia.customer;
 
-import br.com.marlonbarbearia.exceptions.ObjectAlreadyExistsException;
+import br.com.marlonbarbearia.user.CreateUserRequest;
+import br.com.marlonbarbearia.user.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.ObjectNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,17 +19,19 @@ import static java.util.stream.Collectors.toList;
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository repository;
+    private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
 
     @Override
     public Customer findCustomerEntityById(Long customerId) {
-        log.info("CustomerServiceImpl::findCustomerEntityById() Finding customer with id {}" , customerId);
+        log.info("CustomerServiceImpl::findCustomerEntityById() start");
         return repository.findById(customerId)
                 .orElseThrow(() -> new ObjectNotFoundException(customerId, Customer.class.getSimpleName()));
     }
 
     @Override
     public CustomerDTO findCustomerById(Long customerId) {
-        log.info("CustomerServiceImpl::findCustomerById() Finding customer with id {}" , customerId);
+        log.info("CustomerServiceImpl::findCustomerById() start");
         Optional<Customer> customerOptional = repository.findCustomerById(customerId);
         if(customerOptional.isEmpty()) {
             throw new ObjectNotFoundException(customerId, Customer.class.getSimpleName());
@@ -51,17 +55,15 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void createCustomer(CustomerRequest request) {
-        log.info("CustomerServiceImpl::createCustomer() Creating customer from {}", request);
-        boolean phoneNumberIsTaken = repository.findCustomerByPhoneNumber(request.phoneNumber()).isPresent();
-        if(phoneNumberIsTaken){
-            throw new ObjectAlreadyExistsException
-                    ("Customer with phone number: [" + request.phoneNumber() + "] already exists");
-        }
-        repository.save(Customer.builder()
+    public void createCustomer(CreateUserRequest request) {
+        log.info("CustomerServiceImpl::createCustomer() start");
+        userService.isPhoneNumberTaken(request.phoneNumber());
+        repository.save(
+                Customer.builder()
                 .name(request.name())
                 .lastName(request.lastName())
                 .phoneNumber(request.phoneNumber())
+                .password(passwordEncoder.encode(request.password()))
                 .build()
         );
         log.info("CustomerServiceImpl::createCustomer() Customer created {}", request);
@@ -69,11 +71,12 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerDTO findCustomerByPhoneNumber(String phoneNumber) {
-        log.info("CustomerServiceImpl::findCustomerByPhoneNumber() Finding customer with phone number {}", phoneNumber);
+        log.info("CustomerServiceImpl::findCustomerByPhoneNumber() start");
         Optional<Customer> customerOptional = repository.findCustomerByPhoneNumber(phoneNumber);
         if(customerOptional.isEmpty()) {
             throw new ObjectNotFoundException(phoneNumber, Customer.class.getSimpleName());
         }
+        log.info("CustomerServiceImpl::findCustomerByPhoneNumber() customer found");
         return CustomerMapper.customerEntityToResponse(customerOptional.get());
     }
 }

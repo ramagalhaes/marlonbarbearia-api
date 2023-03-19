@@ -59,7 +59,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public AppointmentDTO updateAppointment(Long id, AppointmentRequest appointment) {
+    public AppointmentDTO updateAppointment(Long id, CreateAppointmentRequest appointment) {
         return null;
     }
 
@@ -90,7 +90,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public void createAppointment(AppointmentRequest request) {
+    public void createAppointment(CreateAppointmentRequest request) {
         if(FALSE.equals(appointmentHasTimeConflict(request.date(), request.barberId()))) {
             throw new DateException("The date: [" + request.date() + "] is already taken");
         }

@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 @Builder
-public record AppointmentRequest(
+public record CreateAppointmentRequest(
         Long barberId,
         Long customerId,
         LocalDateTime date,

@@ -1,5 +1,7 @@
 package br.com.marlonbarbearia.barber;
 
+import br.com.marlonbarbearia.user.CreateUserRequest;
+
 import java.util.List;
 
 public interface BarberService {
@@ -8,5 +10,5 @@ public interface BarberService {
     List<BarberDTO> findAllBarbers();
     Barber findBarberEntityByPhoneNumber(String phoneNumber);
     void deleteBarberById(Long barberId);
-    void createNewBarber(BarberRequest barberRequest);
+    void createNewBarber(CreateUserRequest barberRequest);
 }

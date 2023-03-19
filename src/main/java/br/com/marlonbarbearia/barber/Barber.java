@@ -1,33 +1,25 @@
 package br.com.marlonbarbearia.barber;
 
 import br.com.marlonbarbearia.appointment.Appointment;
+import br.com.marlonbarbearia.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.Hibernate;
 
-import javax.persistence.*;
-import java.io.Serializable;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import java.util.List;
 import java.util.Objects;
 
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
 @ToString
 @Entity
-public class Barber implements Serializable {
-
-    private static final Long serialVersionUID = 1L;
-
-    @SequenceGenerator(name = "sequence_id_barber", sequenceName = "sequence_id_barber")
-    @GeneratedValue(generator = "sequence_id_barber")
-    @Id
-    private Long id;
-    private String name;
-    private String lastName;
-    private String phoneNumber;
+public class Barber extends User {
 
     @OneToMany(mappedBy = "barber")
     @JsonIgnore
