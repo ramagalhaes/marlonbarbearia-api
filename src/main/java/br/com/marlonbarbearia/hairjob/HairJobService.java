@@ -6,7 +6,7 @@ public interface HairJobService {
     HairJobDTO findHairJobById(Long hairJobId);
     HairJob findHairJobEntityById(Long hairJobId);
     List<HairJobDTO> findAllHairJobs();
-    void editHairJob(Long hairJobId, HairJobRequest hairJobRequest);
-    void createHairJob(HairJobRequest hairJobRequest);
+    void editHairJob(Long hairJobId, CreateHairJobRequest createHairJobRequest);
+    void createHairJob(CreateHairJobRequest createHairJobRequest);
     void deleteHairJob(Long hairJobId);
 }

@@ -6,7 +6,7 @@ import br.com.marlonbarbearia.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.ObjectNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,7 +20,7 @@ public class BarberServiceImpl implements BarberService {
 
     private final BarberRepository repository;
     private final UserService userService;
-    private final PasswordEncoder passwordEncoder;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     public Barber findBarberEntityById(Long barberId) {
         Optional<Barber> barberOptional = repository.findById(barberId);

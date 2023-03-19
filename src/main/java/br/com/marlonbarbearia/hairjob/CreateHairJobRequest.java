@@ -2,7 +2,7 @@ package br.com.marlonbarbearia.hairjob;
 
 import java.math.BigDecimal;
 
-public record HairJobRequest(
+public record CreateHairJobRequest(
         String name,
         BigDecimal price,
         Integer durationInMinutes

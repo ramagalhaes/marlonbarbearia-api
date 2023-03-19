@@ -9,14 +9,13 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
-@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class HairJob {
 
-    @SequenceGenerator(name = "sequence_id_hairjob", sequenceName = "sequence_id_hairjob")
-    @GeneratedValue(generator = "sequence_id_hairjob")
+    @SequenceGenerator(name = "sequence_id_hair-job", sequenceName = "sequence_id_hair-job")
+    @GeneratedValue(generator = "sequence_id_hair-job")
     @Id
     private Long id;
     private String name;

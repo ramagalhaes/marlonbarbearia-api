@@ -36,7 +36,7 @@ public class CustomerServiceImpl implements CustomerService {
         if(customerOptional.isEmpty()) {
             throw new ObjectNotFoundException(customerId, Customer.class.getSimpleName());
         }
-        return CustomerMapper.customerEntityToResponse(customerOptional.get());
+        return CustomerMapper.entityToResponse(customerOptional.get());
     }
 
     @Override
@@ -44,7 +44,7 @@ public class CustomerServiceImpl implements CustomerService {
         log.info("CustomerServiceImpl::findAllCustomers() Finding all customers");
         return repository.findAllCustomers()
                 .stream()
-                .map(CustomerMapper::customerEntityToResponse)
+                .map(CustomerMapper::entityToResponse)
                 .collect(toList());
     }
 
@@ -77,7 +77,7 @@ public class CustomerServiceImpl implements CustomerService {
             throw new ObjectNotFoundException(phoneNumber, Customer.class.getSimpleName());
         }
         log.info("CustomerServiceImpl::findCustomerByPhoneNumber() customer found");
-        return CustomerMapper.customerEntityToResponse(customerOptional.get());
+        return CustomerMapper.entityToResponse(customerOptional.get());
     }
 }
 

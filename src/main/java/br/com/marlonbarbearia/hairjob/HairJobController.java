@@ -15,15 +15,15 @@ public class HairJobController {
     private final HairJobService service;
 
     @PostMapping
-    public ResponseEntity<Void> createHairJob(@RequestBody HairJobRequest hairJobRequest) {
-        service.createHairJob(hairJobRequest);
+    public ResponseEntity<Void> createHairJob(@RequestBody CreateHairJobRequest createHairJobRequest) {
+        service.createHairJob(createHairJobRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping("/{hairJobId}")
     public ResponseEntity<Void> editHairJob(@PathVariable("hairJobId") Long hairJobId,
-                                              @RequestBody HairJobRequest hairJobRequest) {
-        service.editHairJob(hairJobId, hairJobRequest);
+                                              @RequestBody CreateHairJobRequest createHairJobRequest) {
+        service.editHairJob(hairJobId, createHairJobRequest);
         return ResponseEntity.ok().build();
     }
 

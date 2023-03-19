@@ -6,7 +6,7 @@ public class BarberMapper {
         throw new IllegalStateException("Utility class");
     }
 
-    public static BarberDTO barberEntityToResponse(Barber barber) {
+    public static BarberDTO entityToResponse(Barber barber) {
         return BarberDTO.builder()
                 .id(barber.getId())
                 .name(barber.getName())

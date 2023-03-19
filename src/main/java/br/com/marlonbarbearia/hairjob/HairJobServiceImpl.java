@@ -38,28 +38,28 @@ public class HairJobServiceImpl implements HairJobService {
     }
 
     @Override
-    public void editHairJob(Long hairJobId, HairJobRequest hairJobRequest) {
+    public void editHairJob(Long hairJobId, CreateHairJobRequest createHairJobRequest) {
         HairJob existingHairJob = findHairJobEntityById(hairJobId);
         repository.save(
                 HairJob.builder()
                         .id(existingHairJob.getId())
-                        .name(hairJobRequest.name())
-                        .price(hairJobRequest.price())
-                        .durationInMinutes(hairJobRequest.durationInMinutes())
+                        .name(createHairJobRequest.name())
+                        .price(createHairJobRequest.price())
+                        .durationInMinutes(createHairJobRequest.durationInMinutes())
                         .build()
         );
     }
 
     @Override
-    public void createHairJob(HairJobRequest hairJobRequest) {
-        if(!findHairJobByHairJobName(hairJobRequest.name()).isEmpty()) {
-            throw new ObjectAlreadyExistsException("Hairjob with name: [" + hairJobRequest.name() + "] already exists");
+    public void createHairJob(CreateHairJobRequest createHairJobRequest) {
+        if(!findHairJobByHairJobName(createHairJobRequest.name()).isEmpty()) {
+            throw new ObjectAlreadyExistsException("Hairjob with name: [" + createHairJobRequest.name() + "] already exists");
         }
         repository.save(
                 HairJob.builder()
-                        .name(hairJobRequest.name())
-                        .price(hairJobRequest.price())
-                        .durationInMinutes((hairJobRequest.durationInMinutes()))
+                        .name(createHairJobRequest.name())
+                        .price(createHairJobRequest.price())
+                        .durationInMinutes((createHairJobRequest.durationInMinutes()))
                         .build()
         );
     }

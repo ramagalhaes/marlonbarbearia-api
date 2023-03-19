@@ -6,7 +6,7 @@ public class CustomerMapper {
         throw new IllegalStateException("Utility class");
     }
 
-    public static CustomerDTO customerEntityToResponse(Customer customer) {
+    public static CustomerDTO entityToResponse(Customer customer) {
         return CustomerDTO.builder()
                 .id(customer.getId())
                 .name(customer.getName())
