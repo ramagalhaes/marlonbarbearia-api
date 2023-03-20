@@ -35,7 +35,7 @@ public class HairJobController {
 
     @GetMapping("/{hairJobId}")
     public ResponseEntity<HairJobDTO> findHairJobById(@PathVariable("hairJobId") Long hairJobId) {
-        HairJobDTO hairJobDTO = service.findHairJobById(hairJobId);
+        HairJobDTO hairJobDTO = service.findHairJobDTOById(hairJobId);
         return ResponseEntity.ok().body(hairJobDTO);
     }
 

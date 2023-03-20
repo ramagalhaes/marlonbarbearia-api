@@ -16,10 +16,15 @@ public interface HairJobRepository extends JpaRepository<HairJob, Long> {
     @Query("SELECT new br.com.marlonbarbearia.hairjob.HairJobDTO(h.id, h.name, h.price, h.durationInMinutes) " +
             "FROM HairJob h " +
             "WHERE h.id = :hairJobId")
-    Optional<HairJobDTO> findHairJobById(@Param("hairJobId") Long hairJobId);
+    Optional<HairJobDTO> findHairJobDTOById(@Param("hairJobId") Long hairJobId);
 
-    @Query("SELECT new br.com.marlonbarbearia.hairjob.HairJobDTO(h.id, h.name, h.price, h.durationInMinutes) " +
+    @Query("SELECT h " +
             "FROM HairJob h " +
             "WHERE h.name = :hairJobName")
-    Optional<HairJobDTO> findHairJobByHairJobName(@Param("hairJobName") String hairJobName);
+    Optional<HairJob> findHairJobByHairJobName(@Param("hairJobName") String hairJobName);
+
+    @Query("SELECT h " +
+            "FROM HairJob h " +
+            "WHERE h.id = :id")
+    Optional<HairJob> findHairJobById(@Param("id") Long id);
 }

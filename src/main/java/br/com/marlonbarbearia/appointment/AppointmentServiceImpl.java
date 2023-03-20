@@ -20,7 +20,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -72,7 +72,8 @@ public class AppointmentServiceImpl implements AppointmentService {
         List<Appointment> existingAppointments = repository.findAppointmentsByDateAndBarberId(
                 newAppointmentDay, newAppointmentMonth, newAppointmentYear, barberId
         );
-        if(!existingAppointments.isEmpty()) {
+
+        if (!existingAppointments.isEmpty()) {
             for (Appointment appointment : existingAppointments) {
                 boolean newAppointmentStartsBeforeExisting = appointmentDate.isBefore(appointment.getDate());
                 boolean newAppointmentEndsBeforeExistingStarts = appointmentDate
@@ -82,23 +83,23 @@ public class AppointmentServiceImpl implements AppointmentService {
 
                 if (!((newAppointmentStartsBeforeExisting && newAppointmentEndsBeforeExistingStarts) ||
                         newAppointmentStartsAfterExistingEnds)) {
-                    return false;
+                    return true;
                 }
             }
         }
-        return true;
+        return false;
     }
 
     @Override
     public void createAppointment(CreateAppointmentRequest request) {
-        if(FALSE.equals(appointmentHasTimeConflict(request.date(), request.barberId()))) {
+        if(TRUE.equals(appointmentHasTimeConflict(request.date(), request.barberId()))) {
             throw new DateException("The date: [" + request.date() + "] is already taken");
         }
         Barber barber = barberService.findBarberEntityById(request.barberId());
         Customer customer = customerService.findCustomerEntityById(request.customerId());
         Set<HairJob> hairJobs = request.hairJobs()
                 .stream()
-                .map(hairJobService::findHairJobEntityById)
+                .map(hairJobService::findHairJobById)
                 .collect(Collectors.toSet());
         BigDecimal totalPrice = hairJobs
                 .stream()

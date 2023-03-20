@@ -12,10 +12,11 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
 public class HairJob {
 
-    @SequenceGenerator(name = "sequence_id_hair-job", sequenceName = "sequence_id_hair-job")
-    @GeneratedValue(generator = "sequence_id_hair-job")
+    @SequenceGenerator(name = "sequence_id_hairjob", sequenceName = "sequence_id_hairjob")
+    @GeneratedValue(generator = "sequence_id_hairjob")
     @Id
     private Long id;
     private String name;

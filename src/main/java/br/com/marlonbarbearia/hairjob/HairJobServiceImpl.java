@@ -17,18 +17,19 @@ public class HairJobServiceImpl implements HairJobService {
     private final HairJobRepository repository;
 
     @Override
-    public HairJobDTO findHairJobById(Long hairJobId) {
-        return repository.findHairJobById(hairJobId)
+    public HairJobDTO findHairJobDTOById(Long hairJobId) {
+        return repository.findHairJobDTOById(hairJobId)
                 .orElseThrow(() -> new ObjectNotFoundException(hairJobId, HairJob.class.getSimpleName()));
     }
 
     @Override
-    public HairJob findHairJobEntityById(Long hairJobId) {
+    public HairJob findHairJobById(Long hairJobId) {
         return repository.findById(hairJobId)
                 .orElseThrow(() -> new ObjectNotFoundException(hairJobId, HairJob.class.getSimpleName()));
     }
 
-    private Optional<HairJobDTO> findHairJobByHairJobName(String hairJobName) {
+    @Override
+    public Optional<HairJob> findHairJobByName(String hairJobName) {
         return repository.findHairJobByHairJobName(hairJobName);
     }
 
@@ -39,7 +40,7 @@ public class HairJobServiceImpl implements HairJobService {
 
     @Override
     public void editHairJob(Long hairJobId, CreateHairJobRequest createHairJobRequest) {
-        HairJob existingHairJob = findHairJobEntityById(hairJobId);
+        HairJob existingHairJob = findHairJobById(hairJobId);
         repository.save(
                 HairJob.builder()
                         .id(existingHairJob.getId())
@@ -52,7 +53,8 @@ public class HairJobServiceImpl implements HairJobService {
 
     @Override
     public void createHairJob(CreateHairJobRequest createHairJobRequest) {
-        if(!findHairJobByHairJobName(createHairJobRequest.name()).isEmpty()) {
+        boolean hairJobExists = findHairJobByName(createHairJobRequest.name()).isPresent();
+        if(hairJobExists) {
             throw new ObjectAlreadyExistsException("Hairjob with name: [" + createHairJobRequest.name() + "] already exists");
         }
         repository.save(
