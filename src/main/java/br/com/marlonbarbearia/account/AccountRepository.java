@@ -1,4 +1,4 @@
-package br.com.marlonbarbearia.user;
+package br.com.marlonbarbearia.account;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -8,10 +8,10 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface AccountRepository extends JpaRepository<Account, Long> {
 
     @Query("SELECT u " +
-            "FROM User u " +
+            "FROM Account u " +
             "WHERE u.phoneNumber = :phoneNumber")
-    Optional<User> findUserByPhoneNumber(@Param("phoneNumber") String phoneNumber);
+    Optional<Account> findUserByPhoneNumber(@Param("phoneNumber") String phoneNumber);
 }

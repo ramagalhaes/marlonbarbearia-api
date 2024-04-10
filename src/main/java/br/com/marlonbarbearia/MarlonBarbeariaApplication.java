@@ -1,9 +1,8 @@
 package br.com.marlonbarbearia;
 
-import br.com.marlonbarbearia.barber.BarberService;
+import br.com.marlonbarbearia.barbershop.barber.BarberService;
 import br.com.marlonbarbearia.customer.CustomerService;
-import br.com.marlonbarbearia.user.CreateUserRequest;
-import br.com.marlonbarbearia.user.UserService;
+import br.com.marlonbarbearia.account.CreateAccountRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -17,9 +16,6 @@ public class MarlonBarbeariaApplication implements CommandLineRunner {
     private BCryptPasswordEncoder pe;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
     private CustomerService customerService;
 
     @Autowired
@@ -29,13 +25,9 @@ public class MarlonBarbeariaApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-//        this.userService.createNewUser(
-//                new CreateUserRequest("Raphael", "Magalhães", "33994135", "1234"),
-//                UserType.CUSTOMER
-//        );
 
         customerService.createCustomer(
-                CreateUserRequest.builder()
+                CreateAccountRequest.builder()
                         .name("Raphael")
                         .lastName("Magalhães")
                         .phoneNumber("33994135")
@@ -43,7 +35,7 @@ public class MarlonBarbeariaApplication implements CommandLineRunner {
                         .build()
         );
         barberService.createNewBarber(
-                CreateUserRequest.builder()
+                CreateAccountRequest.builder()
                         .name("Marlon")
                         .lastName("Vitor")
                         .phoneNumber("33994137")

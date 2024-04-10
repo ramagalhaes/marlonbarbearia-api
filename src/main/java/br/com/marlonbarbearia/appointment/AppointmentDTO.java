@@ -20,7 +20,8 @@ public record AppointmentDTO(
         LocalDateTime endTime,
         Set<HairJobDTO> hairJobs,
         BigDecimal price,
-        LocalDateTime updatedAt
+        LocalDateTime updatedAt,
+        AppointmentStatus status
 ) {
     @Override
     public LocalDateTime endTime() {

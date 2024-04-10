@@ -1,7 +1,7 @@
 package br.com.marlonbarbearia.security;
 
-import br.com.marlonbarbearia.user.User;
-import br.com.marlonbarbearia.user.UserRepository;
+import br.com.marlonbarbearia.account.Account;
+import br.com.marlonbarbearia.account.AccountRepository;
 import lombok.AllArgsConstructor;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,31 +18,29 @@ import static java.util.stream.Collectors.toList;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    private final AccountRepository accountRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = findUserByPhoneNumber(username);
-        return User.builder()
+        Account account = findAccountByPhoneNumber(username);
+        return Account.builder()
                 .authorities(
-                        user.getRoles()
+                        account.getRoles()
                                 .stream()
                                 .map(role ->  new SimpleGrantedAuthority(role.getDescription()))
                                 .collect(toList())
                 )
-                .id(user.getId())
-                .lastName(user.getLastName())
-                .name(user.getName())
-                .password(user.getPassword())
-                .phoneNumber(user.getPhoneNumber())
-                .roles(user.getRoles())
+                .id(account.getId())
+                .password(account.getPassword())
+                .phoneNumber(account.getPhoneNumber())
+                .roles(account.getRoles())
                 .build();
     }
 
-    public User findUserByPhoneNumber(String phoneNumber) {
-        Optional<User> userOptional = userRepository.findUserByPhoneNumber(phoneNumber);
+    public Account findAccountByPhoneNumber(String phoneNumber) {
+        Optional<Account> userOptional = accountRepository.findUserByPhoneNumber(phoneNumber);
         return userOptional.orElseThrow(
-                () -> new ObjectNotFoundException(phoneNumber, User.class.getSimpleName())
+                () -> new ObjectNotFoundException(phoneNumber, Account.class.getSimpleName())
         );
     }
 }

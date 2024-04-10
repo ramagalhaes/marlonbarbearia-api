@@ -1,43 +1,42 @@
-package br.com.marlonbarbearia.user;
+package br.com.marlonbarbearia.account;
 
-import br.com.marlonbarbearia.enums.UserType;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import br.com.marlonbarbearia.account.confirmation.AccountConfirmation;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Set;
 
-@Table(name = "tb_user")
+import static br.com.marlonbarbearia.account.AccountStatus.CONFIRMED;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 @SuperBuilder
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class User implements UserDetails {
+@Inheritance(strategy = InheritanceType.JOINED)
+public class Account implements UserDetails {
 
     @ElementCollection(fetch = FetchType.LAZY)
     private Collection<GrantedAuthority> authorities;
 
-    @SequenceGenerator(name = "sequence_id_user", sequenceName = "sequence_id_user")
-    @GeneratedValue(generator = "sequence_id_user")
+    @SequenceGenerator(name = "sequence_id_account", sequenceName = "sequence_id_account")
+    @GeneratedValue(generator = "sequence_id_account")
     @Id
     protected Long id;
-    private String lastName;
-    private String name;
     private String password;
     private String phoneNumber;
     @ElementCollection(fetch = FetchType.EAGER)
-    private Set<UserType> roles;
-
-    public Long getId() {
-        return this.id;
-    }
+    private Set<AccountType> roles;
+    @OneToOne(mappedBy = "account")
+    private AccountConfirmation confirmation;
+    private LocalDateTime createdAt;
+    private Integer status;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -72,6 +71,18 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public AccountStatus getStatus() {
+        return AccountStatus.fromCode(status);
+    }
+
+    public void confirmAccount() {
+        status = CONFIRMED.getCode();
+    }
+
+    public boolean isAccountConfirmed() {
+        return CONFIRMED.equals(getStatus());
     }
 }
 

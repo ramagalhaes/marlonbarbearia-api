@@ -1,4 +1,4 @@
-package br.com.marlonbarbearia.barber;
+package br.com.marlonbarbearia.barbershop.barber;
 
 public class BarberMapper {
 

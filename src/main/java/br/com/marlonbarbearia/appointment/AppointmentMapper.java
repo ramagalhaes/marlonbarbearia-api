@@ -4,7 +4,7 @@ import br.com.marlonbarbearia.hairjob.HairJobDTO;
 
 import java.util.stream.Collectors;
 
-public class AppointmentMapper {
+public abstract class AppointmentMapper {
 
     private AppointmentMapper() {
         throw new IllegalStateException("Utility class");
@@ -31,7 +31,7 @@ public class AppointmentMapper {
                         ).collect(Collectors.toSet()))
                 .price(appointment.getPrice())
                 .updatedAt(appointment.getUpdatedAt())
+                .status(appointment.getStatus())
                 .build();
     }
-
 }

@@ -1,7 +1,6 @@
-package br.com.marlonbarbearia.barber;
+package br.com.marlonbarbearia.barbershop.barber;
 
-import br.com.marlonbarbearia.user.CreateUserRequest;
-import lombok.RequiredArgsConstructor;
+import br.com.marlonbarbearia.account.CreateAccountRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,10 +9,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v1/barbers")
-@RequiredArgsConstructor
-public class BarberController {
+public record BarberController(BarberService service) {
 
-    private final BarberService service;
 
     @GetMapping("/{barberId}")
     public ResponseEntity<BarberDTO> findBarberById(@PathVariable("barberId") Long barberId) {
@@ -28,9 +25,15 @@ public class BarberController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createNewBarber(@RequestBody CreateUserRequest barberRequest) {
+    public ResponseEntity<Void> createNewBarber(@RequestBody CreateAccountRequest barberRequest) {
         service.createNewBarber(barberRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteBarber(@PathVariable("id") Long id) {
+        service.deleteBarberById(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

@@ -1,6 +1,6 @@
 package br.com.marlonbarbearia.customer;
 
-public class CustomerMapper {
+public abstract class CustomerMapper {
 
     private CustomerMapper() {
         throw new IllegalStateException("Utility class");

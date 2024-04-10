@@ -1,8 +1,8 @@
-package br.com.marlonbarbearia.barber;
+package br.com.marlonbarbearia.barbershop.barber;
 
-import br.com.marlonbarbearia.enums.UserType;
-import br.com.marlonbarbearia.user.CreateUserRequest;
-import br.com.marlonbarbearia.user.UserService;
+import br.com.marlonbarbearia.account.AccountService;
+import br.com.marlonbarbearia.account.AccountType;
+import br.com.marlonbarbearia.account.CreateAccountRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.ObjectNotFoundException;
@@ -16,10 +16,10 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class BarberServiceImpl implements BarberService {
+public class BarberService {
 
     private final BarberRepository repository;
-    private final UserService userService;
+    private final AccountService accountService;
     private final BCryptPasswordEncoder passwordEncoder;
 
     public Barber findBarberEntityById(Long barberId) {
@@ -28,7 +28,6 @@ public class BarberServiceImpl implements BarberService {
                 .orElseThrow(() -> new ObjectNotFoundException(barberId, Barber.class.getSimpleName()));
     }
 
-    @Override
     public BarberDTO findBarberById(Long barberId) {
         Optional<BarberDTO> barberOptional = repository.findBarberById(barberId);
         return barberOptional.orElseThrow(
@@ -36,35 +35,24 @@ public class BarberServiceImpl implements BarberService {
         ));
     }
 
-    @Override
     public List<BarberDTO> findAllBarbers() {
         return repository.findAllBarbers();
     }
 
-    @Override
-    public Barber findBarberEntityByPhoneNumber(String phoneNumber) {
-        Optional<Barber> barberOptional = repository.findBarberEntityByPhoneNumber(phoneNumber);
-        return barberOptional.orElseThrow(
-                () -> new ObjectNotFoundException(phoneNumber, Barber.class.getSimpleName()
-        ));
-    }
-
-    @Override
     public void deleteBarberById(Long barberId) {
         findBarberById(barberId);
         repository.deleteById(barberId);
     }
 
-    @Override
-    public void createNewBarber(CreateUserRequest barberRequest) {
-        userService.isPhoneNumberTaken(barberRequest.phoneNumber());
+    public void createNewBarber(CreateAccountRequest barberRequest) {
+        accountService.isPhoneNumberTaken(barberRequest.phoneNumber());
         repository.save(
                 Barber.builder()
                         .name(barberRequest.name())
                         .lastName(barberRequest.lastName())
                         .phoneNumber(barberRequest.phoneNumber())
                         .password(passwordEncoder.encode(barberRequest.password()))
-                        .roles(Set.of(UserType.BARBER))
+                        .roles(Set.of(AccountType.BARBER))
                         .build()
         );
         log.info("Creating barber from {}", barberRequest);

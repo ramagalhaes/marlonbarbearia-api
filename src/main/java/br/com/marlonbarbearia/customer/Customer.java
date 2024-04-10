@@ -1,14 +1,14 @@
 package br.com.marlonbarbearia.customer;
 
+import br.com.marlonbarbearia.account.Account;
 import br.com.marlonbarbearia.appointment.Appointment;
-import br.com.marlonbarbearia.user.User;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.Hibernate;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
-import javax.persistence.Transient;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -19,12 +19,14 @@ import java.util.Objects;
 @Setter
 @ToString
 @SuperBuilder
-public class Customer extends User {
+public class Customer extends Account {
 
+
+    private String lastName;
+    private String name;
     @OneToMany(mappedBy = "customer")
-    @Transient
     @ToString.Exclude
-    private List<Appointment> appointments;
+    private transient List<Appointment> appointments;
 
     @Override
     public boolean equals(Object o) {

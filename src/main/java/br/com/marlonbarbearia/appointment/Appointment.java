@@ -1,12 +1,9 @@
 package br.com.marlonbarbearia.appointment;
 
-import br.com.marlonbarbearia.barber.Barber;
+import br.com.marlonbarbearia.barbershop.barber.Barber;
 import br.com.marlonbarbearia.customer.Customer;
 import br.com.marlonbarbearia.hairjob.HairJob;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -37,6 +34,8 @@ public class Appointment {
     private Integer durationInMinutes;
     private BigDecimal price;
     private LocalDateTime updatedAt;
+    @Getter(AccessLevel.NONE)
+    private Integer status;
 
     @ManyToMany
     @JoinTable(
@@ -45,4 +44,7 @@ public class Appointment {
     )
     private Set<HairJob> hairJobs;
 
+    public AppointmentStatus getStatus() {
+        return AppointmentStatus.fromCode(status);
+    }
 }

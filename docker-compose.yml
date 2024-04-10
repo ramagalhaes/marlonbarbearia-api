@@ -14,6 +14,18 @@ services:
       - postgres
     restart: unless-stopped
 
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3-management-alpine
+    ports:
+      - 5762:5762
+      - 15672:15672
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    networks:
+      - rabbitmq
+
   pgadmin:
     container_name: pgadmin
     image: dpage/pgadmin4
@@ -38,7 +50,10 @@ services:
 networks:
   postgres:
     driver: bridge
+  rabbitmq:
+    driver: bridge
 
 volumes:
   postgres:
   pgadmin:
+  rabbitmq:

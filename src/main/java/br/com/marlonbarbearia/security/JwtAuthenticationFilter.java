@@ -1,15 +1,13 @@
 package br.com.marlonbarbearia.security;
 
-import br.com.marlonbarbearia.user.User;
+import br.com.marlonbarbearia.account.Account;
+import br.com.marlonbarbearia.exceptions.AuthenticationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.ObjectNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -28,7 +26,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     public Authentication attemptAuthentication(
-            HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+            HttpServletRequest request, HttpServletResponse response)  {
         try {
             LoginRequest credentials = new ObjectMapper()
                     .readValue(request.getInputStream(), LoginRequest.class);
@@ -40,7 +38,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             return authenticationManager.authenticate(authenticationToken);
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new AuthenticationException(e.getMessage());
         }
     }
 
@@ -49,7 +47,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             HttpServletRequest request, HttpServletResponse response,
             FilterChain chain, Authentication authentication) throws IOException, ServletException {
 
-        String username = ((User) authentication.getPrincipal()).getUsername();
+        String username = ((Account) authentication.getPrincipal()).getUsername();
         String token = jwtUtil.generateToken(username);
         response.addHeader("Authorization", "Bearer " + token);
 

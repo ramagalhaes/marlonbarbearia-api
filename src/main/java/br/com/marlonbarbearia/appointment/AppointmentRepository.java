@@ -18,8 +18,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
             "WHERE DAY(a.date) = :day " +
             "AND MONTH(a.date) = :month " +
             "AND YEAR(a.date) = :year")
-    List<Appointment> findAppointmentsByDate(
-            @Param("day") Integer day, @Param("month") Integer month, @Param("year") Integer year);
+    List<Appointment> findAppointmentsByDate(@Param("day") Integer day, @Param("month") Integer month, @Param("year") Integer year);
 
     @Query("SELECT a " +
             "FROM Appointment a " +

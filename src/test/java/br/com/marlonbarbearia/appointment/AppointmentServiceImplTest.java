@@ -1,6 +1,6 @@
 package br.com.marlonbarbearia.appointment;
 
-import br.com.marlonbarbearia.barber.BarberService;
+import br.com.marlonbarbearia.barbershop.barber.BarberService;
 import br.com.marlonbarbearia.customer.CustomerService;
 import br.com.marlonbarbearia.hairjob.HairJobService;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,11 +9,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.time.Clock;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.BDDMockito.given;
 
 class AppointmentServiceImplTest {
 
@@ -38,7 +33,7 @@ class AppointmentServiceImplTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        underTest = new AppointmentServiceImpl(
+        underTest = new AppointmentService(
                 repository, barberService, customerService, hairJobService, clock
         );
     }

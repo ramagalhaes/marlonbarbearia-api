@@ -1,4 +1,4 @@
-package br.com.marlonbarbearia.barber;
+package br.com.marlonbarbearia.barbershop.barber;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -9,16 +9,16 @@ import java.util.Optional;
 
 public interface BarberRepository extends JpaRepository<Barber, Long> {
 
-    @Query("SELECT new br.com.marlonbarbearia.barber.BarberDTO(b.id, b.name, b.lastName, b.phoneNumber) " +
+    @Query("SELECT new br.com.marlonbarbearia.barbershop.barber.BarberDTO(b.id, b.name, b.lastName, b.phoneNumber) " +
             "FROM Barber b")
     List<BarberDTO> findAllBarbers();
 
-    @Query("SELECT new br.com.marlonbarbearia.barber.BarberDTO(b.id, b.name, b.lastName, b.phoneNumber) " +
+    @Query("SELECT new br.com.marlonbarbearia.barbershop.barber.BarberDTO(b.id, b.name, b.lastName, b.phoneNumber) " +
             "FROM Barber b " +
             "WHERE b.id = :barberId")
     Optional<BarberDTO> findBarberById(@Param("barberId") Long barberId);
 
-    @Query("SELECT new br.com.marlonbarbearia.barber.BarberDTO(b.id, b.name, b.lastName, b.phoneNumber) " +
+    @Query("SELECT new br.com.marlonbarbearia.barbershop.barber.BarberDTO(b.id, b.name, b.lastName, b.phoneNumber) " +
             "FROM Barber b " +
             "WHERE b.phoneNumber = :phoneNumber")
     Optional<BarberDTO> findBarberByPhoneNumber(@Param("phoneNumber") String phoneNumber);

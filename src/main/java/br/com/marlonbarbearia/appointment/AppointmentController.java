@@ -1,6 +1,6 @@
 package br.com.marlonbarbearia.appointment;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v1/appointments")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AppointmentController {
 
     private final AppointmentService service;
@@ -22,7 +22,7 @@ public class AppointmentController {
     }
 
     @DeleteMapping("/{appointmentId}")
-    ResponseEntity<Void> deleteAppointment(@PathVariable("appointmentId") Long appointmentId) {
+    ResponseEntity<Void> deleteAppointment(@PathVariable("appointmentId") long appointmentId) {
         service.deleteAppointmentById(appointmentId);
         return ResponseEntity.noContent().build();
     }
@@ -35,30 +35,36 @@ public class AppointmentController {
     }
 
     @GetMapping("/{appointmentId}")
-    ResponseEntity<AppointmentDTO> findAppointmentById(@PathVariable("appointmentId") Long appointmentId) {
-        AppointmentDTO appointment = service.findAppointmentById(appointmentId);
+    ResponseEntity<AppointmentDTO> findAppointmentById(@PathVariable("appointmentId") long appointmentId) {
+        AppointmentDTO appointment = service.findAppointmentDTOById(appointmentId);
         return ResponseEntity.ok().body(appointment);
     }
 
     @GetMapping("/barber")
-    ResponseEntity<List<AppointmentDTO>> findAllAppointmentsByBarber(@RequestParam("barber-id") Long barberId) {
+    ResponseEntity<List<AppointmentDTO>> findAllAppointmentsByBarber(@RequestParam("barber-id") long barberId) {
         List<AppointmentDTO> response = service.findAllAppointmentsByBarber(barberId);
         return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/barber/{barberId}/date")
-    ResponseEntity<List<AppointmentDTO>> findAppointmentsByDateAndBarber(@PathVariable("barberId") Long barberId,
-                                                                         @RequestParam("day") Integer day,
-                                                                         @RequestParam("month") Integer month,
-                                                                         @RequestParam("year") Integer year) {
+    ResponseEntity<List<AppointmentDTO>> findAppointmentsByDateAndBarber(@PathVariable("barberId") long barberId,
+                                                                         @RequestParam("day") int day,
+                                                                         @RequestParam("month") int month,
+                                                                         @RequestParam("year") int year) {
         List<AppointmentDTO> list = service.findAllAppointmentsByDateAndBarber(day, month, year, barberId);
         return ResponseEntity.ok().body(list);
     }
 
+    @PatchMapping("/{id}")
+    ResponseEntity<Void> updateAppointment(@PathVariable("id") long id, @RequestBody UpdateAppointmentRequest request) {
+        service.updateAppointment(id, request);
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/date")
-    ResponseEntity<List<AppointmentDTO>> findAppointmentsByDate(@RequestParam("day") Integer day,
-                                                                @RequestParam("month") Integer month,
-                                                                @RequestParam("year") Integer year) {
+    ResponseEntity<List<AppointmentDTO>> findAppointmentsByDate(@RequestParam("day") int day,
+                                                                @RequestParam("month") int month,
+                                                                @RequestParam("year") int year) {
         List<AppointmentDTO> list = service.findAppointmentsByDate(day, month, year);
         return ResponseEntity.ok().body(list);
     }

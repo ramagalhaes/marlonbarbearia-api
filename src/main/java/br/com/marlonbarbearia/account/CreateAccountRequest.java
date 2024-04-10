@@ -1,9 +1,9 @@
-package br.com.marlonbarbearia.user;
+package br.com.marlonbarbearia.account;
 
 import lombok.Builder;
 
 @Builder
-public record CreateUserRequest(
+public record CreateAccountRequest(
         String name,
         String lastName,
         String phoneNumber,
