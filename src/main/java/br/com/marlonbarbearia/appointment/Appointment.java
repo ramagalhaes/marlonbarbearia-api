@@ -2,7 +2,7 @@ package br.com.marlonbarbearia.appointment;
 
 import br.com.marlonbarbearia.barbershop.barber.Barber;
 import br.com.marlonbarbearia.customer.Customer;
-import br.com.marlonbarbearia.hairjob.HairJob;
+import br.com.marlonbarbearia.barbershop.hairjob.HairJob;
 import lombok.*;
 
 import javax.persistence.*;

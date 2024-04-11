@@ -1,4 +1,4 @@
-package br.com.marlonbarbearia.hairjob;
+package br.com.marlonbarbearia.barbershop.hairjob;
 
 import br.com.marlonbarbearia.appointment.Appointment;
 import com.fasterxml.jackson.annotation.JsonIgnore;

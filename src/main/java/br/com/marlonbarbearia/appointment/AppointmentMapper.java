@@ -1,6 +1,6 @@
 package br.com.marlonbarbearia.appointment;
 
-import br.com.marlonbarbearia.hairjob.HairJobDTO;
+import br.com.marlonbarbearia.barbershop.hairjob.HairJobDTO;
 
 import java.util.stream.Collectors;
 

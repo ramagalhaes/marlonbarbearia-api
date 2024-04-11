@@ -1,4 +1,4 @@
-package br.com.marlonbarbearia.hairjob;
+package br.com.marlonbarbearia.barbershop.hairjob;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -9,11 +9,11 @@ import java.util.Optional;
 
 public interface HairJobRepository extends JpaRepository<HairJob, Long> {
 
-    @Query("SELECT new br.com.marlonbarbearia.hairjob.HairJobDTO(h.id, h.name, h.price, h.durationInMinutes) " +
+    @Query("SELECT new br.com.marlonbarbearia.barbershop.hairjob.HairJobDTO(h.id, h.name, h.price, h.durationInMinutes) " +
             "FROM HairJob h")
     List<HairJobDTO> findAllHairJobs();
 
-    @Query("SELECT new br.com.marlonbarbearia.hairjob.HairJobDTO(h.id, h.name, h.price, h.durationInMinutes) " +
+    @Query("SELECT new br.com.marlonbarbearia.barbershop.hairjob.HairJobDTO(h.id, h.name, h.price, h.durationInMinutes) " +
             "FROM HairJob h " +
             "WHERE h.id = :hairJobId")
     Optional<HairJobDTO> findHairJobDTOById(@Param("hairJobId") Long hairJobId);

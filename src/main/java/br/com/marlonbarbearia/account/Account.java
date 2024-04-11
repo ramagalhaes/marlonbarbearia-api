@@ -1,7 +1,10 @@
 package br.com.marlonbarbearia.account;
 
 import br.com.marlonbarbearia.account.confirmation.AccountConfirmation;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

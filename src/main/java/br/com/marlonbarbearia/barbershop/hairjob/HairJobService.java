@@ -1,4 +1,4 @@
-package br.com.marlonbarbearia.hairjob;
+package br.com.marlonbarbearia.barbershop.hairjob;
 
 import br.com.marlonbarbearia.exceptions.ObjectAlreadyExistsException;
 import lombok.AllArgsConstructor;

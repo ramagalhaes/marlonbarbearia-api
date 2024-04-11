@@ -2,7 +2,7 @@ package br.com.marlonbarbearia.appointment;
 
 import br.com.marlonbarbearia.barbershop.barber.BarberService;
 import br.com.marlonbarbearia.customer.CustomerService;
-import br.com.marlonbarbearia.hairjob.HairJobService;
+import br.com.marlonbarbearia.barbershop.hairjob.HairJobService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
